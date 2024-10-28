@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
 import static org.firstinspires.ftc.neutronknightscode.main.robot.Robot.drivetrain;
+import static org.firstinspires.ftc.neutronknightscode.main.robot.Robot.spinningBrushIntake;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -39,6 +40,15 @@ public class RobotTeleOp extends RobotOpMode {
                 -negativePower,
                 negativePower
         );
+        if (gamepad1.left_bumper) {
+            spinningBrushIntake.setPower(1);
+        }
+        if (gamepad1.right_bumper) {
+            spinningBrushIntake.setPower(-1);
+        }
+        if (gamepad1.a) {
+            spinningBrushIntake.setPower(0);
+        }
         handler.slow = false;
         handler.turningMode = false;
     }
