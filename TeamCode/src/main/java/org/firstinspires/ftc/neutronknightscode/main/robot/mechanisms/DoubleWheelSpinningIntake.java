@@ -25,6 +25,7 @@ public class DoubleWheelSpinningIntake implements Mechanism{
 
         Servo2.setPower(Power);
         Servo.setPower(-Power);
+
     }
 }
 
