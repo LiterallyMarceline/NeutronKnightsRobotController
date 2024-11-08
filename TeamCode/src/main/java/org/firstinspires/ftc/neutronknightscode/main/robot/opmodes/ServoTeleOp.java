@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
-import static org.firstinspires.ftc.neutronknightscode.main.robot.Robot.servo;
+//import static org.firstinspires.ftc.neutronknightscode.main.robot.Robot.servo;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -21,6 +21,8 @@ public class ServoTeleOp extends RobotTeleOp {
     public void init() {
         /* WonkyServo = hardwareMap.get(DcMotor.class, "WonkyServo"); */
 
+        super.init();
+
         IntakeServo = hardwareMap.get(CRServo.class, "IntakeServo4");
         IntakeServo2 = hardwareMap.get(CRServo.class, "IntakeServo5");
         BaseServo = hardwareMap.get(CRServo.class, "BaseServo2");
@@ -32,7 +34,10 @@ public class ServoTeleOp extends RobotTeleOp {
     public void loop() {
         super.loop();
 
-        double Power = gamepad2.left_stick_y;
+
+        double Power1 =  gamepad2.left_stick_y;
+        double Power2 =  gamepad2.right_stick_y;
+
 
         /* 6 Revolutions!!! */
 
@@ -64,11 +69,13 @@ public class ServoTeleOp extends RobotTeleOp {
         }
         */
 
-        IntakeServo.setPower(-Power);
-        IntakeServo2.setPower(Power);
+        double IntakePower = gamepad2.left_trigger - gamepad2.right_trigger;
+
+        IntakeServo.setPower(-IntakePower);
+        IntakeServo2.setPower(IntakePower);
 
 
-        BaseServo.setPower(gamepad2.right_trigger);
-        PivotServo.setPower(gamepad2.left_trigger);
+        BaseServo.setPower(Power1);
+        PivotServo.setPower(Power2);
     }
 }

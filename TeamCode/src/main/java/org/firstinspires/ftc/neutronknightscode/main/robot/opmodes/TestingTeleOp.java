@@ -62,8 +62,8 @@ public class TestingTeleOp extends OpMode{
         }
         */
 
-        IntakeServo2.setPower(-Power);
-        IntakeServo.setPower(Power);
+        IntakeServo.setPower(-Power);
+        IntakeServo2.setPower(Power);
 
         BaseServo.setPower(gamepad2.right_trigger);
         PivotServo.setPower(gamepad2.left_trigger);
