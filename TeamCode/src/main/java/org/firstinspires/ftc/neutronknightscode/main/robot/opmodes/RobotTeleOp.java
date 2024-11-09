@@ -16,8 +16,8 @@ public class RobotTeleOp extends RobotOpMode {
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
-        double leftPower = gamepad1.left_trigger - gamepad1.right_trigger;
-        double rightPower = gamepad1.right_trigger - gamepad1.left_trigger;
+        double leftPower = gamepad1.right_trigger - gamepad1.left_trigger;
+        double rightPower = gamepad1.left_trigger - gamepad1.right_trigger;
 
         double topLeftPower = positivePower + rightPower;
         double bottomRightPower = positivePower + leftPower;

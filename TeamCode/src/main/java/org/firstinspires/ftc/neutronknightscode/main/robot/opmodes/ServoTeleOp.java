@@ -35,7 +35,7 @@ public class ServoTeleOp extends RobotTeleOp {
         super.loop();
 
 
-        double Power1 =  gamepad2.left_stick_y;
+        double Power1 =  gamepad2.left_stick_x;
         double Power2 =  gamepad2.right_stick_y;
 
 
