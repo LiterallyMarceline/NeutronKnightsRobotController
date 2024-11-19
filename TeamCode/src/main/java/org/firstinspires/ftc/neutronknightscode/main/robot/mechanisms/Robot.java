@@ -9,7 +9,7 @@ public class Robot implements Mechanism{
     public Arm arm;
     public Intake intake;
 
-    private Robot(){
+    public Robot(){
         drivetrain = new Drivetrain();
         arm = new Arm();
         intake = new Intake();
