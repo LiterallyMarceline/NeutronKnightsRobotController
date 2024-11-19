@@ -23,23 +23,25 @@ public class Robot implements Mechanism{
     public void giveInputs(Gamepad gamepad1, Gamepad gamepad2){
 
     }
-    public enum Bars {
-        HIGH_BAR,
-        LOW_BAR
+    public enum Heights {
+        HIGH,
+        LOW
     }
-    public void hangSpecimen(Bars bar){
+    public void hangSpecimen(Heights bar){
         switch(bar){
-            case HIGH_BAR:
+            case HIGH:
                 break;
-            case LOW_BAR:
+            case LOW:
                 break;
         }
     }
-    public void highBasket(){
-
-    }
-    public void lowBasket(){
-
+    public void scoreBasket(Heights basket){
+        switch(basket){
+            case HIGH:
+                break;
+            case LOW:
+                break;
+        }
     }
     public void getSpecimen(){
 
