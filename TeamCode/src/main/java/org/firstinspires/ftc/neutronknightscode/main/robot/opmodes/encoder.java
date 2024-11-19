@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
+/*package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -40,3 +40,4 @@ public class encoder extends OpMode{
         motor.setMode(DcMotor.RunMode);
     }
 }
+*/
