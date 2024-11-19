@@ -2,7 +2,7 @@ package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.neutronknightscode.main.robot.Robot;
+import org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms.Robot;
 
 
 public abstract class RobotOpMode extends OpMode {
@@ -11,6 +11,6 @@ public abstract class RobotOpMode extends OpMode {
 
     @Override
     public void init() {
-        robot = Robot.init(hardwareMap);
+        robot.init(hardwareMap);
     }
 }

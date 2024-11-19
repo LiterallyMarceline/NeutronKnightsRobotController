@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
-import static org.firstinspires.ftc.neutronknightscode.main.robot.Robot.drivetrain;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
@@ -45,7 +43,7 @@ public class RobotTeleOp extends RobotOpMode {
             bottomLeftPower = -bottomLeftPower;
         }
 
-        drivetrain.setPower(
+        robot.drivetrain.setPower(
                 -topLeftPower,
                 bottomRightPower,
                 topRightPower,

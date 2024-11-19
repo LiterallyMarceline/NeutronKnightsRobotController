@@ -10,6 +10,14 @@ public class Drivetrain implements Mechanism{
     private DcMotor topRight;
     private DcMotor bottomLeft;
 
+    private int x;
+    private int y;
+
+    private float yaw;
+    private float pitch;
+
+    private double maxSpeed;
+
     public Drivetrain(){}
 
     @Override
@@ -24,5 +32,17 @@ public class Drivetrain implements Mechanism{
         bottomRight.setPower(bottomRightPower);
         topRight.setPower(topRightPower);
         bottomLeft.setPower(bottomLeftPower);
+    }
+    public void move(double distance){
+
+    }
+    public void strafe(double distance){
+
+    }
+    public void turn(float radians){
+
+    }
+    public void goTo(int x, int y, float orientation){
+
     }
 }
