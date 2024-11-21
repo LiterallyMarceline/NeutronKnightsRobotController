@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
+import android.graphics.Point;
+
 public class Vision {
 
-    double xPosition;
-    double yPosition;
-
-    public double getPlacement()
-    {
-        return xPosition;
-
-
+    public Point calculateLocation() {
+        return new Point(0,0);
     }
-    public double calculateLocation()
-    {
-        return yPosition;
+    public RobotPlacements getPlacement() {
+        return RobotPlacements.RED_LEFT;
     }
+
 }
