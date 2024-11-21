@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 @TeleOp
 public class RobotTeleOp extends RobotOpMode {
 
-    private final Gamepad currentGamepad1 = gamepad1;
-    private final Gamepad previousGamepad1 = gamepad1;
-    private final Gamepad currentGamepad2 = gamepad2;
-    private final Gamepad previousGamepad2 = gamepad2;
+    private final Gamepad currentGamepad1 = new Gamepad();
+    private final Gamepad previousGamepad1 = new Gamepad();
+    private final Gamepad currentGamepad2 = new Gamepad();
+    private final Gamepad previousGamepad2 = new Gamepad();
 
     @Override
     public void loop() {

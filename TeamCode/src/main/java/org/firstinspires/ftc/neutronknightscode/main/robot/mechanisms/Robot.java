@@ -20,8 +20,8 @@ public class Robot implements Mechanism{
     @Override
     public void init(HardwareMap hardwareMap){
         drivetrain.init(hardwareMap);
-        arm.init(hardwareMap);
-        intake.init(hardwareMap);
+        // arm.init(hardwareMap);
+        // intake.init(hardwareMap);
     }
     public void toggleInvert(){
         inverted = !inverted;

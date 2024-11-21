@@ -15,7 +15,7 @@ public class Drivetrain implements Mechanism{
 
     private volatile Point position;
 
-    private volatile float yaw;
+    private volatile float heading;
     private volatile float pitch;
 
     private double maxSpeed;
