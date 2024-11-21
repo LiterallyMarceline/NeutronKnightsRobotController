@@ -9,6 +9,9 @@ public class Robot implements Mechanism{
     public Arm arm;
     public Intake intake;
 
+    public boolean inverted = false;
+    public boolean slow = false;
+
     public Robot(){
         drivetrain = new Drivetrain();
         arm = new Arm();
@@ -20,8 +23,44 @@ public class Robot implements Mechanism{
         arm.init(hardwareMap);
         intake.init(hardwareMap);
     }
+    public void toggleInvert(){
+        inverted = !inverted;
+    }
+    public void toggleSlow(){
+        slow = !slow;
+    }
     public void giveInputs(Gamepad gamepad1, Gamepad gamepad2){
+        double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
+        double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
+        double leftPower = gamepad1.right_trigger - gamepad1.left_trigger;
+        double rightPower = gamepad1.left_trigger - gamepad1.right_trigger;
+
+        double topLeftPower = positivePower + rightPower;
+        double bottomRightPower = positivePower + leftPower;
+        double topRightPower = negativePower + leftPower;
+        double bottomLeftPower = negativePower + rightPower;
+
+        if(slow){
+            topLeftPower /= 2;
+            bottomRightPower /= 2;
+            topRightPower /= 2;
+            bottomLeftPower /= 2;
+        }
+
+        if(inverted){
+            topLeftPower = -topLeftPower;
+            bottomRightPower = -bottomRightPower;
+            topRightPower = -topRightPower;
+            bottomLeftPower = -bottomLeftPower;
+        }
+
+        drivetrain.setPower(
+                -topLeftPower,
+                bottomRightPower,
+                topRightPower,
+                -bottomLeftPower
+        );
     }
     public enum Heights {
         HIGH,

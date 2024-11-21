@@ -3,6 +3,7 @@ package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 import android.graphics.Point;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Drivetrain implements Mechanism{
