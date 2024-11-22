@@ -11,6 +11,7 @@ public class Robot implements Mechanism{
 
     public boolean inverted = false;
     public boolean slow = false;
+    public boolean ejectSlow = false;
 
     public Robot(){
         drivetrain = new Drivetrain();
@@ -29,6 +30,8 @@ public class Robot implements Mechanism{
     public void toggleSlow(){
         slow = !slow;
     }
+    public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
+
     public void giveInputs(Gamepad gamepad1, Gamepad gamepad2){
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
@@ -61,6 +64,11 @@ public class Robot implements Mechanism{
                 topRightPower,
                 -bottomLeftPower
         );
+
+        double ejectPower = ejectSlow ? gamepad2.left_trigger/2 : gamepad2.left_trigger;
+        intake.intake(gamepad2.right_trigger);
+        intake.eject(ejectPower);
+
     }
     public enum Heights {
         HIGH,

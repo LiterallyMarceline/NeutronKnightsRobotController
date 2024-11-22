@@ -26,6 +26,9 @@ public class RobotTeleOp extends RobotOpMode {
         if(currentGamepad1.right_bumper && !previousGamepad1.right_bumper){
             robot.toggleSlow();
         }
+        if(currentGamepad2.left_bumper && !previousGamepad2.left_bumper){
+            robot.toggleSlowIntake();
+        }
 
         robot.giveInputs(gamepad1,gamepad2);
 
