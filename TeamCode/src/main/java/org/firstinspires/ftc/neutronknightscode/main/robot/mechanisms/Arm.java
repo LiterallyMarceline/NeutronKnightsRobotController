@@ -36,31 +36,38 @@ public class Arm implements Mechanism{
     }
 
 
-    public void rotate(int amount) {
+    public boolean rotate(int amount) {
         // Get the amount IN DEGREES: as a double
         double gearboxRatio = 1;
+        boolean statement = false;
 
-        if (amount+basePosition < 360) {
-            if (amount+basePosition > -360) {
-                basePosition += amount;
+        if ((amount / 180) + basePosition < 180) {
+            if ((amount / 180) + basePosition > 0) {
+                basePosition += amount / 180;
                 BaseServo.setPosition(basePosition);
+                statement = true;
             }
         }
+
+        return statement;
     }
-    public void pivot(int amount) throws InterruptedException {
+
+    public boolean pivot(int amount, boolean direction) throws InterruptedException {
         // Get the amount IN DEGREES: as a double
         double gearboxRatio = 10/3;
-
+        boolean statement = false;
+        int direction_multiply = direction ? -1:1;
+        
         if (amount+pivotPosition < 181) {
             if (amount+pivotPosition > 0) {
-                pivotPosition += gearboxRatio * (amount);
-
-                PivotMotor.setPower(0.256410256);
+                PivotMotor.setPower(0.256410256 * direction_multiply);
                 Thread.sleep((amount / 180) * 1000L);
                 PivotMotor.setPower(0);
+                statement = true;
             }
         }
-
+            
+        return statement;
     }
     public void slide(long rotations, boolean directionboolean) throws InterruptedException {
         // Get the amount IN ROTATIONS: as a double
