@@ -1,99 +1,95 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
+
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Robot implements Mechanism{
+// All the code above is imports
+public class Arm implements Mechanism{
+    // Creating the motors and servos objects.
+    private Servo BaseServo;
+    private DcMotor PivotMotor;
+    private DcMotor WonkyServo;
 
-    public Drivetrain drivetrain;
-    public Arm arm;
-    public Intake intake;
 
-    public boolean inverted = false;
-    public boolean slow = false;
-    public boolean ejectSlow = false;
+    // Important Variables!
+    public volatile double pivotPosition;
+    public volatile double slidePosition;
+    public volatile double basePosition;
 
-    public Robot(){
-        drivetrain = new Drivetrain();
-        arm = new Arm();
-        intake = new Intake();
-    }
     @Override
-    public void init(HardwareMap hardwareMap){
-        drivetrain.init(hardwareMap);
-        arm.init(hardwareMap);
-        intake.init(hardwareMap);
+    public void init(HardwareMap hardwareMap) {
+        // Configuring motors and servos.
+        BaseServo = hardwareMap.get(Servo.class, "BaseServo2");
+        PivotMotor = hardwareMap.get(DcMotor.class, "PivotMotor");
+
+        WonkyServo = hardwareMap.get(DcMotor.class, "WonkyServo");
+
+        // Creating a brake for the pivoting motor so that it will not have to be bounced.
+        PivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Setting position variables to 0 for starting position.
+        basePosition = 0;
+        pivotPosition = 0;
+        slidePosition = 0;
     }
-    public void toggleInvert(){
-        inverted = !inverted;
-    }
-    public void toggleSlow(){
-        slow = !slow;
-    }
-    public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
 
-    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2){
-        double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
-        double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
-        double leftPower = gamepad1.right_trigger - gamepad1.left_trigger;
-        double rightPower = gamepad1.left_trigger - gamepad1.right_trigger;
+    public boolean rotate(int amount) {
+        // Get the amount IN DEGREES: as a double
+        double gearboxRatio = 1;
+        boolean statement = false;
 
-        double topLeftPower = positivePower + rightPower;
-        double bottomRightPower = positivePower + leftPower;
-        double topRightPower = negativePower + leftPower;
-        double bottomLeftPower = negativePower + rightPower;
-
-        if(slow){
-            topLeftPower /= 2;
-            bottomRightPower /= 2;
-            topRightPower /= 2;
-            bottomLeftPower /= 2;
+        if ((amount / 180) + basePosition < 180) {
+            if ((amount / 180) + basePosition > 0) {
+                basePosition += amount / 180;
+                BaseServo.setPosition(basePosition);
+                statement = true;
+            }
         }
 
-        if(inverted){
-            topLeftPower = -topLeftPower;
-            bottomRightPower = -bottomRightPower;
-            topRightPower = -topRightPower;
-            bottomLeftPower = -bottomLeftPower;
+        return statement;
+    }
+
+    public boolean pivot(int amount, boolean direction) throws InterruptedException {
+        // Get the amount IN DEGREES: as a double
+        double gearboxRatio = 100/24;
+        boolean statement = false;
+        int direction_multiply = direction ? -1:1;
+
+        if (amount+pivotPosition < 181) {
+            if (amount+pivotPosition > 0) {
+                PivotMotor.setPower(0.256410256 * direction_multiply);
+                Thread.sleep((amount / 180) * 1000L);
+                PivotMotor.setPower(0);
+                statement = true;
+            }
         }
 
-        drivetrain.setPower(
-                -topLeftPower,
-                bottomRightPower,
-                topRightPower,
-                -bottomLeftPower
-        );
-
-        double ejectPower = ejectSlow ? gamepad2.left_trigger/2 : gamepad2.left_trigger;
-        intake.intake(gamepad2.right_trigger);
-        intake.eject(ejectPower);
-
+        return statement;
     }
-    public enum Heights {
-        HIGH,
-        LOW
-    }
-    public void hangSpecimen(Heights bar){
-        switch(bar){
-            case HIGH:
-                break;
-            case LOW:
-                break;
+    public void slide(long rotations, boolean directionboolean) throws InterruptedException {
+        // Get the amount IN ROTATIONS: as a double
+        int direction;
+
+        direction = directionboolean ? 1 : -1;
+
+        if (slidePosition>=0) {
+            if (slidePosition <= 1) {
+                WonkyServo.setPower(direction);
+                Thread.sleep(512 * rotations);
+                WonkyServo.setPower(0);
+                if (directionboolean) {
+                    slidePosition += rotations / 7;
+                } else {
+                    slidePosition -= rotations / 7;
+                }
+            }
         }
-    }
-    public void scoreBasket(Heights basket){
-        switch(basket){
-            case HIGH:
-                break;
-            case LOW:
-                break;
-        }
-    }
-    public void getSpecimen(){
+
 
     }
-    public void getSample(){
 
-    }
+
 }
