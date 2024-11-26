@@ -1,54 +1,36 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp
 public class RobotTeleOp extends RobotOpMode {
 
-    private boolean setInverted = false;
-    private boolean inverted = false;
+    private final Gamepad currentGamepad1 = new Gamepad();
+    private final Gamepad previousGamepad1 = new Gamepad();
+    private final Gamepad currentGamepad2 = new Gamepad();
+    private final Gamepad previousGamepad2 = new Gamepad();
 
     @Override
     public void loop() {
 
-        double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
-        double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
+        previousGamepad1.copy(currentGamepad1);
+        previousGamepad2.copy(currentGamepad2);
 
-        double leftPower = gamepad1.right_trigger - gamepad1.left_trigger;
-        double rightPower = gamepad1.left_trigger - gamepad1.right_trigger;
+        currentGamepad1.copy(gamepad1);
+        currentGamepad2.copy(gamepad2);
 
-        double topLeftPower = positivePower + rightPower;
-        double bottomRightPower = positivePower + leftPower;
-        double topRightPower = negativePower + leftPower;
-        double bottomLeftPower = negativePower + rightPower;
-
-        if(gamepad1.right_bumper){
-            topLeftPower /= 2;
-            bottomRightPower /= 2;
-            topRightPower /= 2;
-            bottomLeftPower /= 2;
+        if(currentGamepad1.a && !previousGamepad1.a){
+            robot.toggleInvert();
+        }
+        if(currentGamepad1.right_bumper && !previousGamepad1.right_bumper){
+            robot.toggleSlow();
+        }
+        if(currentGamepad2.left_bumper && !previousGamepad2.left_bumper){
+            robot.toggleSlowIntake();
         }
 
-        if(gamepad1.a && !setInverted){
-            setInverted = true;
-            inverted = !inverted;
-        } else {
-            setInverted = gamepad1.a;
-        }
-
-        if(inverted){
-            topLeftPower = -topLeftPower;
-            bottomRightPower = -bottomRightPower;
-            topRightPower = -topRightPower;
-            bottomLeftPower = -bottomLeftPower;
-        }
-
-        robot.drivetrain.setPower(
-                -topLeftPower,
-                bottomRightPower,
-                topRightPower,
-                -bottomLeftPower
-        );
+        robot.giveInputs(gamepad1,gamepad2);
 
     }
 }

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
+import android.graphics.Point;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Drivetrain implements Mechanism{
@@ -10,11 +13,10 @@ public class Drivetrain implements Mechanism{
     private DcMotor topRight;
     private DcMotor bottomLeft;
 
-    private int x;
-    private int y;
+    private volatile Point position;
 
-    private float yaw;
-    private float pitch;
+    private volatile float heading;
+    private volatile float pitch;
 
     private double maxSpeed;
 
