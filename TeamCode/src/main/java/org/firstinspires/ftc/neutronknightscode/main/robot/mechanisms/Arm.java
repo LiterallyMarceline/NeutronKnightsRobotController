@@ -22,7 +22,7 @@ public class Arm implements Mechanism{
     public void init(HardwareMap hardwareMap) {
         // Configuring motors and servos.
         BaseServo = hardwareMap.get(Servo.class, "BaseServo2");
-        PivotMotor = hardwareMap.get(DcMotor.class, "PivotMotor");
+        PivotMotor = hardwareMap.get(DcMotor.class, "PivotMotor0");
 
         WonkyServo = hardwareMap.get(DcMotor.class, "WonkyServo");
 
@@ -54,7 +54,7 @@ public class Arm implements Mechanism{
 
     public boolean pivot(int amount, boolean direction) throws InterruptedException {
         // Get the amount IN DEGREES: as a double
-        double gearboxRatio = 10/3;
+        double gearboxRatio = 100/24;
         boolean statement = false;
         int direction_multiply = direction ? -1:1;
 
@@ -69,9 +69,10 @@ public class Arm implements Mechanism{
 
         return statement;
     }
-    public void slide(long rotations, boolean directionboolean) throws InterruptedException {
+    public boolean slide(long rotations, boolean directionboolean) throws InterruptedException {
         // Get the amount IN ROTATIONS: as a double
         int direction;
+        boolean statement = false;
 
         direction = directionboolean ? 1 : -1;
 
@@ -85,9 +86,11 @@ public class Arm implements Mechanism{
                 } else {
                     slidePosition -= rotations / 7;
                 }
+                statement = true;
             }
         }
 
+        return statement;
 
     }
 

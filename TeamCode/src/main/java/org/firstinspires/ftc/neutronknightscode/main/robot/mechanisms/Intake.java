@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
+ package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -24,9 +24,9 @@ public class Intake implements Mechanism {
         intakeServo2.setPower(-power);
 
     }
-    public void eject(double power){
+    public void eject(double power) {
         intakeServo1.setPower(-power);
         intakeServo2.setPower(power);
 
     }
-}
+    }
