@@ -54,10 +54,10 @@ public class Arm implements Mechanism{
 
     public boolean pivot(int amount, boolean direction) throws InterruptedException {
         // Get the amount IN DEGREES: as a double
-        double gearboxRatio = 10/3;
+        double gearboxRatio = 100/24;
         boolean statement = false;
         int direction_multiply = direction ? -1:1;
-        
+
         if (amount+pivotPosition < 181) {
             if (amount+pivotPosition > 0) {
                 PivotMotor.setPower(0.256410256 * direction_multiply);
@@ -66,7 +66,7 @@ public class Arm implements Mechanism{
                 statement = true;
             }
         }
-            
+
         return statement;
     }
     public void slide(long rotations, boolean directionboolean) throws InterruptedException {
