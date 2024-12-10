@@ -44,12 +44,11 @@ public class Arm implements Mechanism {
     /**
      * TeleOp Method
      * @param pivotPower the power for the pivotMotor
-     * @param slidePower the power for the slideMotor
      * @see #init(HardwareMap)
      */
-    public void setPower(double pivotPower, double slidePower){
+    public void setPower(double pivotPower/*, double slidePower (Not in use yet)*/){
         // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
-        slidePosition = slideMotor.getCurrentPosition();
+        // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
 
         // Not in use yet;
         /*
@@ -61,7 +60,7 @@ public class Arm implements Mechanism {
 
         // Not in use yet
         /*if(pivotMin <= pivotPosition && pivotPosition <= pivotMax)*/ pivotMotor.setPower(pivotPower);
-        /*if(slideMin <= slidePosition && slidePosition <= slideMax)*/ slideMotor.setPower(slidePower);
+        /*if(slideMin <= slidePosition && slidePosition <= slideMax) slideMotor.setPower(slidePower);*/
     }
     // UNFINISHED
     public void pivot(double amount) {

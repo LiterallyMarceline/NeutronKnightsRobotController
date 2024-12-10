@@ -72,6 +72,8 @@ public class Robot implements Mechanism{
         double ejectPower = ejectSlow ? gamepad2.left_trigger/2 : gamepad2.left_trigger;
         intake.intake(gamepad2.right_trigger);
         intake.eject(ejectPower);
+
+        arm.setPower(-gamepad2.right_stick_y);
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
         //arm.rotate(gamepad2.right_stick_y*0.01);
 
