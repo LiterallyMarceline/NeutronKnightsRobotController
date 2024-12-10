@@ -28,13 +28,13 @@ public class Robot implements Mechanism{
     public void toggleInvert(){
         inverted = !inverted;
     }
-    //public void toggleSlow(){
-      //  slow = !slow;
-   // }
+    public void toggleSlow(){
+        slow = !slow;
+    }
     public void toggleDirection(){
         direction = !direction;
     }
-    //public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
+    public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
 
     public void giveInputs(Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
