@@ -12,6 +12,7 @@ public class Robot implements Mechanism{
     public boolean inverted = false;
     public boolean slow = false;
     public boolean ejectSlow = false;
+    public boolean direction = true;
 
     public Robot(){
         drivetrain = new Drivetrain();
@@ -27,12 +28,15 @@ public class Robot implements Mechanism{
     public void toggleInvert(){
         inverted = !inverted;
     }
-    public void toggleSlow(){
-        slow = !slow;
+    //public void toggleSlow(){
+      //  slow = !slow;
+   // }
+    public void toggleDirection(){
+        direction = !direction;
     }
-    public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
+    //public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
 
-    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2){
+    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
@@ -59,16 +63,19 @@ public class Robot implements Mechanism{
         }
 
         drivetrain.setPower(
-                -topLeftPower,
+                topLeftPower,
                 bottomRightPower,
                 topRightPower,
-                -bottomLeftPower
+                bottomLeftPower
         );
 
         double ejectPower = ejectSlow ? gamepad2.left_trigger/2 : gamepad2.left_trigger;
         intake.intake(gamepad2.right_trigger);
         intake.eject(ejectPower);
+        //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
+        //arm.rotate(gamepad2.right_stick_y*0.01);
 
+        //arm.slide((long) gamepad2.left_stick_y*360);
     }
     public enum Heights {
         HIGH,

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 import android.graphics.Point;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -28,6 +29,9 @@ public class Drivetrain implements Mechanism{
         bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
         topRight = hardwareMap.get(DcMotor.class, "topRight");
         bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
+
+        topLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        bottomLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public void setPower(double topLeftPower, double bottomRightPower, double topRightPower, double bottomLeftPower){
         topLeft.setPower(topLeftPower);

@@ -1,98 +1,96 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 // All the code above is imports
-public class Arm implements Mechanism{
+public class Arm implements Mechanism {
     // Creating the motors and servos objects.
-    private Servo BaseServo;
-    private DcMotor PivotMotor;
-    private DcMotor WonkyServo;
+    // private Servo BaseServo; @Deprecated
+    private DcMotor pivotMotor;
+    private DcMotor slideMotor;
+    private MotorEncoder pivotEncoder;
+    private MotorEncoder slideEncoder;
 
 
     // Important Variables!
     public volatile double pivotPosition;
     public volatile double slidePosition;
+
+    @Deprecated
     public volatile double basePosition;
 
     @Override
     public void init(HardwareMap hardwareMap) {
         // Configuring motors and servos.
-        BaseServo = hardwareMap.get(Servo.class, "BaseServo2");
-        PivotMotor = hardwareMap.get(DcMotor.class, "PivotMotor0");
+        // BaseServo = hardwareMap.get(Servo.class, "BaseServo2"); @Deprecated
+        pivotMotor = hardwareMap.get(DcMotor.class, "PivotMotor0");
+        slideMotor = hardwareMap.get(DcMotor.class, "WonkyServo");
 
-        WonkyServo = hardwareMap.get(DcMotor.class, "WonkyServo");
+        pivotEncoder = new MotorEncoder(1425.1,25/6);
+        slideEncoder = new MotorEncoder(1425.1,1);
 
         // Creating a brake for the pivoting motor so that it will not have to be bounced.
-        PivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Setting position variables to 0 for starting position.
-        basePosition = 0;
+        // basePosition = 0; @Deprecated
         pivotPosition = 0;
         slidePosition = 0;
     }
 
+    /**
+     * TeleOp Method
+     * @param pivotPower the power for the pivotMotor
+     * @param slidePower the power for the slideMotor
+     * @see #init(HardwareMap)
+     */
+    public void setPower(double pivotPower, double slidePower){
+        // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
+        slidePosition = slideMotor.getCurrentPosition();
 
-    public boolean rotate(int amount) {
+        // Not in use yet;
+        /*
+        double pivotMax;
+        double pivotMin;
+         */
+        double slideMax;
+        double slideMin;
+
+        // Not in use yet
+        /*if(pivotMin <= pivotPosition && pivotPosition <= pivotMax)*/ pivotMotor.setPower(pivotPower);
+        /*if(slideMin <= slidePosition && slidePosition <= slideMax)*/ slideMotor.setPower(slidePower);
+    }
+    // UNFINISHED
+    public void pivot(double amount) {
+        pivotMotor.setPower(amount);
+    }
+    @Deprecated
+    public void slide(long rotations) throws InterruptedException {
+        // Get the amount IN ROTATIONS: as a double
+
+        if (slidePosition >= 0) {
+            if (slidePosition <= 1) {
+                slideMotor.setPower(rotations/Math.abs(rotations));
+                Thread.sleep(512 * rotations);
+                slideMotor.setPower(0);
+                slidePosition += rotations/7;
+            }
+            // TO BE FIXED LATER.. GET RID OF TIME AND USE DISTANCE
+        }
+    }
+    @Deprecated
+    public void rotate(double amount) {
         // Get the amount IN DEGREES: as a double
         double gearboxRatio = 1;
-        boolean statement = false;
 
         if ((amount / 180) + basePosition < 180) {
             if ((amount / 180) + basePosition > 0) {
                 basePosition += amount / 180;
-                BaseServo.setPosition(basePosition);
-                statement = true;
+                //BaseServo.setPosition(basePosition);
             }
         }
-
-        return statement;
     }
-
-    public boolean pivot(int amount, boolean direction) throws InterruptedException {
-        // Get the amount IN DEGREES: as a double
-        double gearboxRatio = 100/24;
-        boolean statement = false;
-        int direction_multiply = direction ? -1:1;
-
-        if (amount+pivotPosition < 181) {
-            if (amount+pivotPosition > 0) {
-                PivotMotor.setPower(0.256410256 * direction_multiply);
-                Thread.sleep((amount / 180) * 1000L);
-                PivotMotor.setPower(0);
-                statement = true;
-            }
-        }
-
-        return statement;
-    }
-    public boolean slide(long rotations, boolean directionboolean) throws InterruptedException {
-        // Get the amount IN ROTATIONS: as a double
-        int direction;
-        boolean statement = false;
-
-        direction = directionboolean ? 1 : -1;
-
-        if (slidePosition>=0) {
-            if (slidePosition <= 1) {
-                WonkyServo.setPower(direction);
-                Thread.sleep(512 * rotations);
-                WonkyServo.setPower(0);
-                if (directionboolean) {
-                    slidePosition += rotations / 7;
-                } else {
-                    slidePosition -= rotations / 7;
-                }
-                statement = true;
-            }
-        }
-
-        return statement;
-
-    }
-
-
 }
