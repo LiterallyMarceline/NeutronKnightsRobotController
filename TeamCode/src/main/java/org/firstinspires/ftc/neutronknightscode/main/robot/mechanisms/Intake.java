@@ -7,26 +7,30 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Intake implements Mechanism {
 
     //public volatile int speed = 0;
-    private CRServo intakeServo1;
-    private CRServo intakeServo2;
+    private CRServo intakeServoLeft;
+    private CRServo intakeServoRight;
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        intakeServo1 = hardwareMap.get(CRServo.class, "intakeServo1");
-        intakeServo2 = hardwareMap.get(CRServo.class, "intakeServo2");
-        intakeServo2.setDirection(DcMotorSimple.Direction.REVERSE);
+        try {
+            intakeServoLeft = hardwareMap.get(CRServo.class, "intakeServoLeft");
+            intakeServoRight = hardwareMap.get(CRServo.class, "intakeServoRight");
+        } catch (Exception e){
+            return;
+        }
+        intakeServoRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public void turnOff(){
-        intakeServo1.setPower(0);
-        intakeServo2.setPower(0);
+        intakeServoLeft.setPower(0);
+        intakeServoRight.setPower(0);
     }
     public void intake(double power){
-        intakeServo1.setPower(power);
-        intakeServo2.setPower(power);
+        intakeServoLeft.setPower(power);
+        intakeServoRight.setPower(power);
     }
     public void eject(double power) {
-        intakeServo1.setPower(-power);
-        intakeServo2.setPower(-power);
+        intakeServoLeft.setPower(-power);
+        intakeServoRight.setPower(-power);
 
     }
 }

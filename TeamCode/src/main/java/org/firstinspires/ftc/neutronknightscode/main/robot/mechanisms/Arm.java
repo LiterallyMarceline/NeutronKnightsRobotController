@@ -26,9 +26,12 @@ public class Arm implements Mechanism {
     public void init(HardwareMap hardwareMap) {
         // Configuring motors and servos.
         // BaseServo = hardwareMap.get(Servo.class, "BaseServo2"); @Deprecated
-        pivotMotor = hardwareMap.get(DcMotor.class, "PivotMotor0");
-        slideMotor = hardwareMap.get(DcMotor.class, "WonkyServo");
-
+        try {
+            pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
+            slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
+        } catch (Exception e){
+            return;
+        }
         pivotEncoder = new MotorEncoder(1425.1,25/6);
         slideEncoder = new MotorEncoder(1425.1,1);
 

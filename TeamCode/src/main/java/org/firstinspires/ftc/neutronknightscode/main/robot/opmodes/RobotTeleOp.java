@@ -20,21 +20,19 @@ public class RobotTeleOp extends RobotOpMode {
         currentGamepad1.copy(gamepad1);
         currentGamepad2.copy(gamepad2);
 
-        telemetry.addData("power", "%f power", currentGamepad2.right_stick_y*180);
+        telemetry.addData("power", "%f power", currentGamepad2.right_stick_y * 180);
         telemetry.update();
 
-        if(currentGamepad1.a && !previousGamepad1.a){
+        if (currentGamepad1.a && !previousGamepad1.a) {
             robot.toggleInvert();
         }
-
-        //if(currentGamepad1.right_bumper && !previousGamepad1.right_bumper){
-          //  robot.toggleSlow();
-        //}
-        //if(currentGamepad2.left_bumper && !previousGamepad2.left_bumper){
-          //  robot.toggleSlowIntake();
-        //
-        // }
-        if(currentGamepad2.right_bumper && !previousGamepad2.right_bumper){
+        if(currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+            robot.toggleSlow();
+        }
+        if(currentGamepad2.left_bumper && !previousGamepad2.left_bumper){
+            robot.toggleSlowIntake();
+        }
+        if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
             robot.toggleDirection();
         }
         try {

@@ -25,11 +25,14 @@ public class Drivetrain implements Mechanism{
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        topLeft = hardwareMap.get(DcMotor.class, "topLeft");
-        bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
-        topRight = hardwareMap.get(DcMotor.class, "topRight");
-        bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
-
+        try {
+            topLeft = hardwareMap.get(DcMotor.class, "topLeft");
+            bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
+            topRight = hardwareMap.get(DcMotor.class, "topRight");
+            bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
+        } catch (Exception e){
+            return;
+        }
         topLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         bottomLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
