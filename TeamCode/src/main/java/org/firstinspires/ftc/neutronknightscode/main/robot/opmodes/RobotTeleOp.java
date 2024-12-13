@@ -20,7 +20,7 @@ public class RobotTeleOp extends RobotOpMode {
         currentGamepad1.copy(gamepad1);
         currentGamepad2.copy(gamepad2);
 
-        telemetry.addData("power", "%f power", currentGamepad2.right_stick_y * 180);
+        telemetry.addData("power", "%f power", -gamepad2.right_stick_y);
         telemetry.update();
 
         if (currentGamepad1.a && !previousGamepad1.a) {
