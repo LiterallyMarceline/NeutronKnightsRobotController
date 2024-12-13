@@ -22,9 +22,9 @@ public class MotorEncoder {
      * @param tpcm sets {@link #ticksPerCm}
      * @return returns the Encoder
      */
-     public MotorEncoder drivetrainEncoder(double wd, double tpcm){
+     public MotorEncoder drivetrainEncoder(double wd){
          wheelDiameter = wd;
-         ticksPerCm = tpcm;
+         ticksPerCm = (ticksPerRev * gearRatio) / (wheelDiameter * 3.1415);
          return this;
      }
 

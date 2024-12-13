@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -92,6 +93,9 @@ public class Robot implements Mechanism{
             case LOW:
                 break;
         }
+    }
+    public void move(double distance){
+        drivetrain.move(distance);
     }
     public void scoreBasket(Heights basket){
         switch(basket){

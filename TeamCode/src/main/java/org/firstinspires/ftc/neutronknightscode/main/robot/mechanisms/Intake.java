@@ -20,6 +20,11 @@ public class Intake implements Mechanism {
         }
         intakeServoRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
+
+    /**
+     * setPower method for Intake, sets power of the Intake in TeleOp
+     * @param power the intake power
+     */
     public void setPower(double power){
         intakeServoLeft.setPower(power);
         intakeServoRight.setPower(power);
