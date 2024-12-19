@@ -4,7 +4,6 @@ import android.graphics.Point;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Drivetrain implements Mechanism{
@@ -37,15 +36,19 @@ public class Drivetrain implements Mechanism{
         topLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         bottomLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        topLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bottomRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        topRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bottomLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         drivetrainEncoder.drivetrainEncoder(1.04);
     }
-    public void setPower(double topLeftPower, double bottomRightPower, double topRightPower, double bottomLeftPower){
+    public void setPower(double topLeftPower, double bottomRightPower, double topRightPower, double bottomLeftPower) {
         topLeft.setPower(topLeftPower);
         bottomRight.setPower(bottomRightPower);
         topRight.setPower(topRightPower);
         bottomLeft.setPower(bottomLeftPower);
     }
-    public void move(double distance){
+    private void startEncoder(){
         topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -55,12 +58,8 @@ public class Drivetrain implements Mechanism{
         bottomRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int topRightTarget = topRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int bottomLeftTarget = bottomLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-
+    }
+    public void runToPosition(int topLeftTarget, int bottomRightTarget, int topRightTarget, int bottomLeftTarget){
         topLeft.setTargetPosition(topLeftTarget);
         bottomRight.setTargetPosition(bottomRightTarget);
         topRight.setTargetPosition(topRightTarget);
@@ -71,15 +70,18 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         bottomLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double motorPower = distance / Math.abs(distance);
+        double topLeftPower = topLeftTarget == 0 ? 0 : topLeftTarget > topLeft.getCurrentPosition() ? 1 : -1;
+        double bottomRightPower = bottomRightTarget == 0 ? 0 : bottomRightTarget > bottomRight.getCurrentPosition() ? 1 : -1;
+        double topRightPower = topRightTarget == 0 ? 0 : topRightTarget > topRight.getCurrentPosition() ? 1 : -1;
+        double bottomLeftPower = bottomLeftTarget == 0 ? 0 : bottomLeftTarget > bottomLeft.getCurrentPosition() ? 1 : -1;
 
-        setPower(motorPower,motorPower,motorPower,motorPower);
+        setPower(topLeftPower, bottomRightPower, topRightPower, bottomLeftPower);
 
         while (topLeft.isBusy() && bottomRight.isBusy() && topRight.isBusy() && bottomLeft.isBusy()){
-            topLeft.getCurrentPosition();
-            bottomRight.getCurrentPosition();
-            topRight.getCurrentPosition();
-            bottomLeft.getCurrentPosition();
+            int topLeftPos = topLeft.getCurrentPosition();
+            int bottomRightPos = bottomRight.getCurrentPosition();
+            int topRigthPos = topRight.getCurrentPosition();
+            int bottomLeftPos = bottomLeft.getCurrentPosition();
         }
 
         setPower(0,0,0,0);
@@ -89,10 +91,27 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void strafe(double distance){
+    public void move(double distance){
+        startEncoder();
 
+        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+        int topRightTarget = topRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+        int bottomLeftTarget = bottomLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+
+        runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
     }
-    public void turn(float radians){
+    public void strafe(double distance){
+        startEncoder();
+
+        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+        int topRightTarget = topRight.getCurrentPosition() - (int)(distance * drivetrainEncoder.ticksPerCm);
+        int bottomLeftTarget = bottomLeft.getCurrentPosition() - (int)(distance * drivetrainEncoder.ticksPerCm);
+
+        runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
+    }
+    public void turn(int degrees){
 
     }
     public void goTo(int x, int y, float orientation){

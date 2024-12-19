@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous
 public class RobotAuto extends RobotOpMode {
+
+
     private boolean ran = false;
     @Override
     public void loop() {

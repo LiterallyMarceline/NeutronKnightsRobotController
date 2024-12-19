@@ -97,6 +97,9 @@ public class Robot implements Mechanism{
     public void move(double distance){
         drivetrain.move(distance);
     }
+    public void strafe(double distance){
+        drivetrain.strafe(distance);
+    }
     public void scoreBasket(Heights basket){
         switch(basket){
             case HIGH:
