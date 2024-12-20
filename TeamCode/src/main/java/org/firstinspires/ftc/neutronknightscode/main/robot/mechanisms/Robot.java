@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Robot implements Mechanism{
 
     public Drivetrain drivetrain;
@@ -37,7 +39,7 @@ public class Robot implements Mechanism{
     }
     public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
 
-    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
+    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) throws InterruptedException {
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
@@ -76,7 +78,9 @@ public class Robot implements Mechanism{
         double totalIntakePower = ejectPower-intakePower;
         intake.setPower(totalIntakePower);
 
-        arm.setPower(-gamepad2.right_stick_y);
+        arm.setPower(-gamepad2.right_stick_y, telemetry);
+        telemetry.addData("power", "%f power", -gamepad2.right_stick_y);
+        telemetry.update();
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
         //arm.rotate(gamepad2.right_stick_y*0.01);
 

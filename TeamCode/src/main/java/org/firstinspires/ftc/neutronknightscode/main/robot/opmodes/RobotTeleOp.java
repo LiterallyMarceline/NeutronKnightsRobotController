@@ -23,6 +23,8 @@ public class RobotTeleOp extends RobotOpMode {
         telemetry.addData("power", "%f power", -gamepad2.right_stick_y);
         telemetry.update();
 
+
+
         if (currentGamepad1.a && !previousGamepad1.a) {
             robot.toggleInvert();
         }
@@ -36,7 +38,7 @@ public class RobotTeleOp extends RobotOpMode {
             robot.toggleDirection();
         }
         try {
-            robot.giveInputs(gamepad1,gamepad2);
+            robot.giveInputs(gamepad1,gamepad2, telemetry);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
