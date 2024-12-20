@@ -13,6 +13,8 @@ public class RobotAuto extends RobotOpMode {
             robot.move(500);
             ran = true;
         }
+
+
     }
 }
 

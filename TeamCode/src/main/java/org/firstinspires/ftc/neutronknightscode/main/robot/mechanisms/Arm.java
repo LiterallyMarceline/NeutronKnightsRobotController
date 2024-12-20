@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 // All the code above is imports
 public class Arm implements Mechanism {
     // Creating the motors and servos objects.
@@ -19,6 +21,8 @@ public class Arm implements Mechanism {
     public volatile double pivotPosition;
     public volatile double slidePosition;
 
+    private int positionToKeep = 0;
+
     @Deprecated
     public volatile double basePosition;
 
@@ -28,7 +32,7 @@ public class Arm implements Mechanism {
         // BaseServo = hardwareMap.get(Servo.class, "BaseServo2"); @Deprecated
         try {
             pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
-            slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
+            //slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
         } catch (Exception e){
             return;
         }
@@ -42,6 +46,10 @@ public class Arm implements Mechanism {
         // basePosition = 0; @Deprecated
         pivotPosition = 0;
         slidePosition = 0;
+
+        pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     /**
@@ -49,7 +57,7 @@ public class Arm implements Mechanism {
      * @param pivotPower the power for the pivotMotor
      * @see #init(HardwareMap)
      */
-    public void setPower(double pivotPower/*, double slidePower (Not in use yet)*/){
+    public void setPower(double pivotPower, Telemetry telemetry/*, double slidePower (Not in use yet)*/){
         // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
         // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -61,8 +69,31 @@ public class Arm implements Mechanism {
         double slideMax;
         double slideMin;
 
+        // testing set to position
+        if(pivotPower < 0)
+        {
+            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()-200);
+            positionToKeep = pivotMotor.getCurrentPosition();
+            pivotMotor.setPower(pivotPower);
+        } else if(pivotPower > 0){
+            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
+            positionToKeep = pivotMotor.getCurrentPosition();
+            pivotMotor.setPower(pivotPower);
+        } else
+        {
+            pivotMotor.setTargetPosition(positionToKeep);
+            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            pivotMotor.setPower(.2);
+        }
+
+        telemetry.addData("arm power", "%f power", pivotPower);
+        telemetry.addData("arm pos", "%d pos", pivotMotor.getCurrentPosition());
+        telemetry.update();
         // Not in use yet
-        /*if(pivotMin <= pivotPosition && pivotPosition <= pivotMax)*/ pivotMotor.setPower(pivotPower);
+        /*if(pivotMin <= pivotPosition && pivotPosition <= pivotMax)*/
+
+
         /*if(slideMin <= slidePosition && slidePosition <= slideMax) slideMotor.setPower(slidePower);*/
     }
     // UNFINISHED

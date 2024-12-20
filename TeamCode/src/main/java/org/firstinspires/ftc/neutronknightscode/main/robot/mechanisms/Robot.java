@@ -38,6 +38,7 @@ public class Robot implements Mechanism{
         direction = !direction;
     }
     public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
+
     public void giveInputs(Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
