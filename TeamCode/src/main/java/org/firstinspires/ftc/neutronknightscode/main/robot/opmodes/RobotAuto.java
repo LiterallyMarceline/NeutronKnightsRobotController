@@ -10,7 +10,7 @@ public class RobotAuto extends RobotOpMode {
     @Override
     public void loop() {
         if(!ran) {
-            robot.move(10);
+            robot.move(500);
             ran = true;
         }
     }

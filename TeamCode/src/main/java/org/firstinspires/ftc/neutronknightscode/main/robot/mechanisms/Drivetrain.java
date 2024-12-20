@@ -6,8 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.neutronknightscode.main.robot.lib.GoBildaPinpointDriver;
+
 public class Drivetrain implements Mechanism{
 
+    private GoBildaPinpointDriver odo;
     private DcMotor topLeft;
     private DcMotor bottomRight;
     private DcMotor topRight;
@@ -30,6 +33,12 @@ public class Drivetrain implements Mechanism{
             bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
             topRight = hardwareMap.get(DcMotor.class, "topRight");
             bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
+
+            odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+            odo.setOffsets(-100.0, -65.0);
+            odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+            odo.resetPosAndIMU();
         } catch (Exception e){
             return;
         }
@@ -91,6 +100,26 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void move(int x){
+        odo.update();
+        double targetX = odo.getPosX() + x;
+        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
+        int odoHeading = heading.run(odo.getHeading());
+        int orgHeading = odoHeading;
+        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 : 1;
+        setPower(motorPower,motorPower,motorPower,motorPower);
+        while(true){
+            odo.update();
+            if(x < 0){
+                if(targetX >= odo.getPosX()) break;
+            } else {
+                if(targetX <= odo.getPosX()) break;
+            }
+        }
+        setPower(0,0,0,0);
+        int target = odoHeading - orgHeading;
+        turn(target);
+    }
     public void move(double distance){
         startEncoder();
 
@@ -111,10 +140,48 @@ public class Drivetrain implements Mechanism{
 
         runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
     }
+    interface inlineFunc {
+        int run(double doubl);
+    }
     public void turn(int degrees){
+        odo.update();
+        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
+        int odoHeading = heading.run(odo.getHeading());
+        double targetHeading = odoHeading;
 
+        double leftMotorPower = degrees == 0 ? 0 : targetHeading > odoHeading ? -1 : 1;
+        double rightMotorPower = degrees == 0 ? 0 : targetHeading > odoHeading ? 1 : -1;
+        setPower(leftMotorPower, rightMotorPower, rightMotorPower, leftMotorPower);
+        if(degrees != 0){
+            while (true) {
+                odo.update();
+                if (degrees < 0) {
+                    if (targetHeading >= odoHeading) break;
+                } else {
+                    if (targetHeading <= odoHeading) break;
+                }
+            }
+        }
+        setPower(0,0,0,0);
     }
     public void goTo(int x, int y, float orientation){
 
     }
 }
+/*odo.update();
+        telemetry.addData("Status", "Initialized");
+        telemetry.addData("X offset", odo.getXOffset());
+        telemetry.addData("Y offset", odo.getYOffset());
+        telemetry.addData("Device Version Number:", odo.getDeviceVersion());
+        telemetry.addData("Device Scalar", odo.getYawScalar());
+        Pose2D pos = odo.getPosition();
+        String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+        telemetry.addData("Position", data);
+        Pose2D vel = odo.getVelocity();
+        String velocity = String.format(Locale.US,"{XVel: %.3f, YVel: %.3f, HVel: %.3f}", vel.getX(DistanceUnit.MM), vel.getY(DistanceUnit.MM), vel.getHeading(AngleUnit.DEGREES));
+        telemetry.addData("Velocity", velocity);
+        telemetry.addData("Status", odo.getDeviceStatus());
+        telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
+        telemetry.update();
+        telemetry.update();
+*/

@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
+package org.firstinspires.ftc.neutronknightscode.main.robot.lib;
 
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 

@@ -52,7 +52,7 @@ public class Arm implements Mechanism {
     public void setPower(double pivotPower/*, double slidePower (Not in use yet)*/){
         // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
         // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
-
+        pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Not in use yet;
         /*
         double pivotMax;
