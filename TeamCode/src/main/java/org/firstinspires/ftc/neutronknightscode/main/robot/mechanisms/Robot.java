@@ -39,7 +39,7 @@ public class Robot implements Mechanism{
     }
     public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
 
-    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2) throws InterruptedException {
+    public void giveInputs(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) throws InterruptedException {
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
@@ -78,7 +78,7 @@ public class Robot implements Mechanism{
         double totalIntakePower = ejectPower-intakePower;
         intake.setPower(totalIntakePower);
 
-        //arm.setPower(-gamepad2.right_stick_y);
+        arm.setPower(-gamepad2.right_stick_y, telemetry );
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
         //arm.rotate(gamepad2.right_stick_y*0.01);
 
@@ -89,16 +89,10 @@ public class Robot implements Mechanism{
         LOW
     }
     public void hangSpecimen(Heights bar){
-        boolean startHang;
-        switch(bar) {
+        switch(bar){
             case HIGH:
-                // Set the arm position to high.
-                drivetrain.move(48.0);
-                // Lower the arm to the bar
-
-            case LOW:
                 break;
-            default:
+            case LOW:
                 break;
         }
     }

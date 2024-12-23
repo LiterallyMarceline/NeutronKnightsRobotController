@@ -3,6 +3,8 @@ package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms.Arm;
+
 @TeleOp
 public class RobotTeleOp extends RobotOpMode {
 
@@ -10,6 +12,10 @@ public class RobotTeleOp extends RobotOpMode {
     private final Gamepad previousGamepad1 = new Gamepad();
     private final Gamepad currentGamepad2 = new Gamepad();
     private final Gamepad previousGamepad2 = new Gamepad();
+
+    private final int down = 4694;
+    private final int bar = 2900;
+    private final int basket = 2725;
 
     @Override
     public void loop() {
@@ -23,6 +29,8 @@ public class RobotTeleOp extends RobotOpMode {
         telemetry.addData("power", "%f power", -gamepad2.right_stick_y);
         telemetry.update();
 
+        telemetry.addData("position", "%f pos", Arm.pivotPosition);
+        telemetry.update();
 
 
         if (currentGamepad1.a && !previousGamepad1.a) {
@@ -41,6 +49,18 @@ public class RobotTeleOp extends RobotOpMode {
             robot.giveInputs(gamepad1,gamepad2);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+
+        //arm set position
+
+        if (gamepad2.dpad_down) {
+            robot.arm.setPosition(down);
+        }
+        if (gamepad2.dpad_up) {
+            robot.arm.setPosition(basket);
+        }
+        if (gamepad2.dpad_right) {
+            robot.arm.setPosition(bar);
         }
 
     }
