@@ -38,7 +38,7 @@ public class RobotTeleOp extends RobotOpMode {
             robot.toggleDirection();
         }
         try {
-            robot.giveInputs(gamepad1,gamepad2, telemetry);
+            robot.giveInputs(gamepad1,gamepad2);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

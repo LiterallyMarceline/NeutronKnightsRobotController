@@ -78,7 +78,7 @@ public class Robot implements Mechanism{
         double totalIntakePower = ejectPower-intakePower;
         intake.setPower(totalIntakePower);
 
-        arm.setPower(-gamepad2.right_stick_y);
+        //arm.setPower(-gamepad2.right_stick_y);
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
         //arm.rotate(gamepad2.right_stick_y*0.01);
 
@@ -89,10 +89,16 @@ public class Robot implements Mechanism{
         LOW
     }
     public void hangSpecimen(Heights bar){
-        switch(bar){
+        boolean startHang;
+        switch(bar) {
             case HIGH:
-                break;
+                // Set the arm position to high.
+                drivetrain.move(48.0);
+                // Lower the arm to the bar
+
             case LOW:
+                break;
+            default:
                 break;
         }
     }

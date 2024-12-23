@@ -89,7 +89,7 @@ public class Drivetrain implements Mechanism{
         while (topLeft.isBusy() && bottomRight.isBusy() && topRight.isBusy() && bottomLeft.isBusy()){
             int topLeftPos = topLeft.getCurrentPosition();
             int bottomRightPos = bottomRight.getCurrentPosition();
-            int topRigthPos = topRight.getCurrentPosition();
+            int topRightPos = topRight.getCurrentPosition();
             int bottomLeftPos = bottomLeft.getCurrentPosition();
         }
 
@@ -100,7 +100,7 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void move(int x){
+    public void move(double x){
         odo.update();
         double targetX = odo.getPosX() + x;
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
@@ -120,16 +120,16 @@ public class Drivetrain implements Mechanism{
         int target = odoHeading - orgHeading;
         turn(target);
     }
-    public void move(double distance){
-        startEncoder();
-
-        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int topRightTarget = topRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int bottomLeftTarget = bottomLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-
-        runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
-    }
+//    public void move(double distance){
+//        startEncoder();
+//
+//        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+//        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+//        int topRightTarget = topRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+//        int bottomLeftTarget = bottomLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
+//
+//        runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
+//    }
     public void strafe(double distance){
         startEncoder();
 
