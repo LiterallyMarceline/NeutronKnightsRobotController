@@ -16,9 +16,10 @@ public class Arm implements Mechanism {
     private MotorEncoder pivotEncoder;
     private MotorEncoder slideEncoder;
 
+    private boolean autoSetPosition = false;
 
     // Important Variables!
-    public volatile double pivotPosition;
+    public static volatile double pivotPosition;
     public volatile double slidePosition;
 
     private int positionToKeep = 0;
@@ -36,6 +37,7 @@ public class Arm implements Mechanism {
         } catch (Exception e){
             return;
         }
+        // Configuring the encoders for future encoding.. I guess..
         pivotEncoder = new MotorEncoder(1425.1,25/6);
         slideEncoder = new MotorEncoder(1425.1,1);
 
@@ -43,10 +45,10 @@ public class Arm implements Mechanism {
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Setting position variables to 0 for starting position.
-        // basePosition = 0; @Deprecated
         pivotPosition = 0;
         slidePosition = 0;
 
+        // Setting the mode for the encoders.
         pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -57,6 +59,10 @@ public class Arm implements Mechanism {
      * @param pivotPower the power for the pivotMotor
      * @see #init(HardwareMap)
      */
+
+    public void loop(HardwareMap hardwareMap) {
+        pivotPosition = pivotMotor.getCurrentPosition();
+    }
     public void setPower(double pivotPower, Telemetry telemetry/*, double slidePower (Not in use yet)*/){
         // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
         // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
@@ -72,19 +78,25 @@ public class Arm implements Mechanism {
         // testing set to position
         if(pivotPower < 0)
         {
+            autoSetPosition = false;
             pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()-200);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
         } else if(pivotPower > 0){
+            autoSetPosition = false;
             pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
         } else
         {
-            pivotMotor.setTargetPosition(positionToKeep);
-            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            pivotMotor.setPower(.2);
+            if(!autoSetPosition)
+            {
+                pivotMotor.setTargetPosition(positionToKeep);
+                pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                pivotMotor.setPower(.2);
+            }
+
         }
 
         telemetry.addData("arm power", "%f power", pivotPower);
@@ -125,5 +137,14 @@ public class Arm implements Mechanism {
                 //BaseServo.setPosition(basePosition);
             }
         }
+    }
+    public void setPosition(int pos)
+    {
+        autoSetPosition = true;
+        pivotMotor.setTargetPosition(pos);
+
+        pivotMotor.setPower(1);
+
+
     }
 }
