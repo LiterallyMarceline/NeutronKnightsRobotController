@@ -145,7 +145,7 @@ public class Drivetrain implements Mechanism{
     }
     public void turn(int degrees){
         odo.update();
-        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
+        inlineFunc heading = (radians) -> (int) (radians * (180/Math.PI));
         int odoHeading = heading.run(odo.getHeading());
         double targetHeading = odoHeading;
 
