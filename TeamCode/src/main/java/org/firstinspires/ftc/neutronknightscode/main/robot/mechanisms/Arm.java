@@ -114,7 +114,7 @@ public class Arm implements Mechanism {
             // TO BE FIXED LATER.. GET RID OF TIME AND USE DISTANCE
         }
     }
-    @Deprecated
+
     public void rotate(double amount) {
         // Get the amount IN DEGREES: as a double
         double gearboxRatio = 1;
