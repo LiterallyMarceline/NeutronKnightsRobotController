@@ -29,8 +29,8 @@ public class RobotTeleOp extends RobotOpMode {
         telemetry.addData("power", "%f power", -gamepad2.right_stick_y);
         telemetry.update();
 
-        telemetry.addData("position", "%f pos", Arm.pivotPosition);
-        telemetry.update();
+       // telemetry.addData("position", "%f pos", Arm.pivotPosition);
+        // telemetry.update();
 
 
         if (currentGamepad1.a && !previousGamepad1.a) {
@@ -54,7 +54,7 @@ public class RobotTeleOp extends RobotOpMode {
         //arm set position
 
         if (gamepad2.dpad_down) {
-            robot.arm.setPosition(down);
+        robot.arm.setPosition(down);
         }
         if (gamepad2.dpad_up) {
             robot.arm.setPosition(basket);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,6 +14,7 @@ public class Arm implements Mechanism {
     // private Servo BaseServo; @Deprecated
     private DcMotor pivotMotor;
     private DcMotor slideMotor;
+    private CRServo rotationServo;
     private MotorEncoder pivotEncoder;
     private MotorEncoder slideEncoder;
 
@@ -21,11 +23,9 @@ public class Arm implements Mechanism {
     // Important Variables!
     public static volatile double pivotPosition;
     public volatile double slidePosition;
+    public volatile double rotationPosition;
 
     private int positionToKeep = 0;
-
-    @Deprecated
-    public volatile double basePosition;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -34,19 +34,21 @@ public class Arm implements Mechanism {
         try {
             pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
             //slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
+
+            rotationServo = hardwareMap.get(CRServo.class,"rotationServo");
         } catch (Exception e){
             return;
         }
         // Configuring the encoders for future encoding.. I guess..
         pivotEncoder = new MotorEncoder(1425.1,25/6);
         slideEncoder = new MotorEncoder(1425.1,1);
-
         // Creating a brake for the pivoting motor so that it will not have to be bounced.
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Setting position variables to 0 for starting position.
         pivotPosition = 0;
         slidePosition = 0;
+        rotationPosition = 0;
 
         // Setting the mode for the encoders.
         pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -56,7 +58,7 @@ public class Arm implements Mechanism {
 
     /**
      * TeleOp Method
-     * @param pivotPower the power for the pivotMotor
+     * @param hardwareMap the power for the pivotMotor
      * @see #init(HardwareMap)
      */
 
@@ -128,15 +130,8 @@ public class Arm implements Mechanism {
     }
 
     public void rotate(double amount) {
-        // Get the amount IN DEGREES: as a double
-        double gearboxRatio = 1;
-
-        if ((amount / 180) + basePosition < 180) {
-            if ((amount / 180) + basePosition > 0) {
-                basePosition += amount / 180;
-                //BaseServo.setPosition(basePosition);
-            }
-        }
+        // Get the amount IN POWER: as a double
+        rotationServo.setPower(amount);
     }
     public void setPosition(int pos)
     {
