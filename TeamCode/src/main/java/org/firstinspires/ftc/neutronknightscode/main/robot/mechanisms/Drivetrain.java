@@ -28,20 +28,18 @@ public class Drivetrain implements Mechanism{
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        try {
-            topLeft = hardwareMap.get(DcMotor.class, "topLeft");
-            bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
-            topRight = hardwareMap.get(DcMotor.class, "topRight");
-            bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
 
-            odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
-            odo.setOffsets(-100.0, -65.0);
-            odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-            odo.resetPosAndIMU();
-        } catch (Exception e){
-            return;
-        }
+        topLeft = hardwareMap.get(DcMotor.class, "topLeft");
+        bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
+        topRight = hardwareMap.get(DcMotor.class, "topRight");
+        bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
+
+        odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+        odo.setOffsets(-100.0, -65.0);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.resetPosAndIMU();
+
         topLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         bottomLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -120,7 +118,7 @@ public class Drivetrain implements Mechanism{
         int target = odoHeading - orgHeading;
         turn(target);
     }
-//    public void move(double distance){
+    //    public void move(double distance){
 //        startEncoder();
 //
 //        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
