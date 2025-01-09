@@ -7,6 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.neutronknightscode.main.robot.lib.GoBildaPinpointDriver;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
+import java.util.Locale;
 
 public class Drivetrain implements Mechanism{
 
@@ -35,7 +41,7 @@ public class Drivetrain implements Mechanism{
         bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
-        odo.setOffsets(-100.0, -65.0);
+        odo.setOffsets(125.0, 90.0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.resetPosAndIMU();
@@ -98,16 +104,38 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void move(double x){
+    public void move(double x, float power){
         odo.update();
         double targetX = odo.getPosX() + x;
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
         int odoHeading = heading.run(odo.getHeading());
         int orgHeading = odoHeading;
-        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 : 1;
+        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 * power : 1 * power;
         setPower(motorPower,motorPower,motorPower,motorPower);
         while(true){
             odo.update();
+            if(x < 0){
+                if(targetX >= odo.getPosX()) break;
+            } else {
+                if(targetX <= odo.getPosX()) break;
+            }
+        }
+        setPower(0,0,0,0);
+        int target = odoHeading - orgHeading;
+        turn(target);
+    }
+    // for debugging
+    public void move(double x, float power, Telemetry telemetry){
+        odo.update();
+        double targetX = odo.getPosX() + x;
+        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
+        int odoHeading = heading.run(odo.getHeading());
+        int orgHeading = odoHeading;
+        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 * power : 1 * power;
+        setPower(motorPower,motorPower,motorPower,motorPower);
+        while(true){
+            odo.update();
+            updateOdo(telemetry);
             if(x < 0){
                 if(targetX >= odo.getPosX()) break;
             } else {
@@ -165,8 +193,7 @@ public class Drivetrain implements Mechanism{
     public void goTo(int x, int y, float orientation){
 
     }
-}
-/*odo.update();
+    public void updateOdo(Telemetry telemetry){
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset", odo.getXOffset());
         telemetry.addData("Y offset", odo.getYOffset());
@@ -182,4 +209,8 @@ public class Drivetrain implements Mechanism{
         telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
         telemetry.update();
         telemetry.update();
+    }
+}
+/*odo.update();
+
 */

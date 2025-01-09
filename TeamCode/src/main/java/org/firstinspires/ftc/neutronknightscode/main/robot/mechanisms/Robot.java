@@ -17,6 +17,10 @@ public class Robot implements Mechanism{
     public boolean ejectSlow = false;
     public boolean direction = true;
 
+    public final int armPositionDown = 4694;
+    public final int armPositionBar = 2900;
+    public final int armPositionBasket = 2725;
+
     public Robot(){
         drivetrain = new Drivetrain();
         arm = new Arm();
@@ -40,6 +44,22 @@ public class Robot implements Mechanism{
     public void toggleSlowIntake() { ejectSlow = !ejectSlow; }
 
     public void giveInputs(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) throws InterruptedException {
+
+        double right_stick_x = 3* gamepad1.right_stick_x;
+        double right_stick_y = 3* gamepad1.right_stick_y;
+        double right_trigger = 3* gamepad1.right_trigger;
+        double left_trigger = 3* gamepad1.left_trigger;
+
+        right_stick_x = Math.pow(3, 3*right_stick_x-2);
+        right_stick_y = Math.pow(3, 3*right_stick_y-2);
+        right_trigger = Math.pow(3, 3*right_trigger-2);
+        left_trigger = Math.pow(3, 3*left_trigger-2);
+
+        right_stick_x = right_stick_x/3;
+        right_stick_y = right_stick_y/3;
+        right_trigger = right_trigger/3;
+        left_trigger = left_trigger/3;
+
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
@@ -50,6 +70,11 @@ public class Robot implements Mechanism{
         double bottomRightPower = positivePower + leftPower;
         double topRightPower = negativePower + leftPower;
         double bottomLeftPower = negativePower + rightPower;
+
+        topLeftPower = -topLeftPower;
+        bottomRightPower = -bottomRightPower;
+        topRightPower = -topRightPower;
+        bottomLeftPower = -bottomLeftPower;
 
         if(slow){
             topLeftPower /= 2;
@@ -80,26 +105,36 @@ public class Robot implements Mechanism{
 
         arm.setPower(-gamepad2.right_stick_y, telemetry );
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
-        if (gamepad2.left_stick_x == 0) { }
-        else {
-            arm.rotate(gamepad2.left_stick_x);
-        }
+
+        arm.rotate(gamepad2.left_stick_x);
+
         //arm.slide((long) gamepad2.left_stick_y*360);
     }
     public enum Heights {
         HIGH,
         LOW
     }
-    public void hangSpecimen(Heights bar){
+    public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
-                break;
-            case LOW:
-                break;
+                int forwardDistance = 100;
+                int reverseDistance = 5;
+
+                //arm.setPosition(armPositionBar);
+                move(forwardDistance, .5f, telemetry);
+//                arm.setPosition(armPositionBasket);
+//                move(reverseDistance, .5f);
+//                intake.eject(0.5);
+//                arm.setPosition(armPositionDown);
+//                move(reverseDistance, .5f);
+//                intake.turnOff();
         }
     }
-    public void move(int distance){
-        drivetrain.move(distance);
+    public void move(int distance, float power){
+        drivetrain.move(distance, power);
+    }
+    public void move(int distance, float power, Telemetry telemetry){
+        drivetrain.move(distance, power, telemetry);
     }
     public void strafe(double distance){
         drivetrain.strafe(distance);

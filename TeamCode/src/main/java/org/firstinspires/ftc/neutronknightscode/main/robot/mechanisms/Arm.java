@@ -14,11 +14,12 @@ public class Arm implements Mechanism {
     // private Servo BaseServo; @Deprecated
     private DcMotor pivotMotor;
     private DcMotor slideMotor;
-    private CRServo rotationServo;
+    private DcMotor rotationMotor;
     private MotorEncoder pivotEncoder;
     private MotorEncoder slideEncoder;
 
     private boolean autoSetPosition = false;
+    private boolean rotationAutoSetPosition = false;
 
     // Important Variables!
     public static volatile double pivotPosition;
@@ -26,6 +27,7 @@ public class Arm implements Mechanism {
     public volatile double rotationPosition;
 
     private int positionToKeep = 0;
+    private int rotationPositionToKeep = 0;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -35,8 +37,9 @@ public class Arm implements Mechanism {
             pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
             //slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
 
-            rotationServo = hardwareMap.get(CRServo.class,"rotationServo");
+            rotationMotor = hardwareMap.get(DcMotor.class,"rotationMotor");
         } catch (Exception e){
+            System.out.println("Either the pivot motor, or the rotation servo, have not been located.");
             return;
         }
         // Configuring the encoders for future encoding.. I guess..
@@ -69,6 +72,7 @@ public class Arm implements Mechanism {
         // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
         // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rotationMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Not in use yet;
         /*
         double pivotMax;
@@ -112,7 +116,12 @@ public class Arm implements Mechanism {
     }
     // UNFINISHED
     public void pivot(double amount) {
-        pivotMotor.setPower(amount);
+        try {
+            pivotMotor.setPower(amount);
+
+        } catch(Exception e){
+            System.out.println("Pivot is currently unavailable, because the robot is unable to find the pivot motor.  ");
+        }
     }
     @Deprecated
     public void slide(long rotations) throws InterruptedException {
@@ -131,7 +140,32 @@ public class Arm implements Mechanism {
 
     public void rotate(double amount) {
         // Get the amount IN POWER: as a double
-        rotationServo.setPower(amount);
+        try {
+            if(amount < 0)
+            {
+                rotationAutoSetPosition = false;
+                rotationMotor.setTargetPosition(rotationMotor.getCurrentPosition()-50);
+                rotationPositionToKeep = rotationMotor.getCurrentPosition();
+                rotationMotor.setPower(amount);
+            } else if(amount > 0){
+                rotationAutoSetPosition = false;
+                rotationMotor.setTargetPosition(rotationMotor.getCurrentPosition()+50);
+                rotationPositionToKeep = rotationMotor.getCurrentPosition();
+                rotationMotor.setPower(amount);
+            } else
+            {
+                if(!rotationAutoSetPosition)
+                {
+                    rotationMotor.setTargetPosition(rotationPositionToKeep);
+                    rotationMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    rotationMotor.setPower(.2);
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println("Rotation is currently unavailable, since the robot cannot find the rotation servo.");
+        }
     }
     public void setPosition(int pos)
     {
