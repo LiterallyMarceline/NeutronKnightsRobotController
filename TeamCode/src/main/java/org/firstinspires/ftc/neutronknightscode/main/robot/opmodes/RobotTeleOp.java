@@ -13,9 +13,9 @@ public class RobotTeleOp extends RobotOpMode {
     private final Gamepad currentGamepad2 = new Gamepad();
     private final Gamepad previousGamepad2 = new Gamepad();
 
-    private final int down = 4694;
-    private final int bar = 2900;
-    private final int basket = 2725;
+//    private final int down = 4694;
+//    private final int bar = 2900;
+//    private final int basket = 2725;
 
     @Override
     public void loop() {
@@ -57,13 +57,13 @@ public class RobotTeleOp extends RobotOpMode {
         //arm set position
 
         if (gamepad2.dpad_down) {
-        robot.arm.setPosition(down);
+        robot.arm.setPosition(robot.armPositionDown);
         }
         if (gamepad2.dpad_up) {
-            robot.arm.setPosition(basket);
+            robot.arm.setPosition(robot.armPositionBasket);
         }
         if (gamepad2.dpad_right) {
-            robot.arm.setPosition(bar);
+            robot.arm.setPosition(robot.armPositionBar);
         }
 
     }

@@ -104,26 +104,26 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void move(double x, float power){
-        odo.update();
-        double targetX = odo.getPosX() + x;
-        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
-        int odoHeading = heading.run(odo.getHeading());
-        int orgHeading = odoHeading;
-        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 * power : 1 * power;
-        setPower(motorPower,motorPower,motorPower,motorPower);
-        while(true){
-            odo.update();
-            if(x < 0){
-                if(targetX >= odo.getPosX()) break;
-            } else {
-                if(targetX <= odo.getPosX()) break;
-            }
-        }
-        setPower(0,0,0,0);
-        int target = odoHeading - orgHeading;
-        turn(target);
-    }
+//    public void move(double x, float power){
+//        odo.update();
+//        double targetX = odo.getPosX() + x;
+//        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
+//        int odoHeading = heading.run(odo.getHeading());
+//        int orgHeading = odoHeading;
+//        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 * power : 1 * power;
+//        setPower(motorPower,motorPower,motorPower,motorPower);
+//        while(true){
+//            odo.update();
+//            if(x < 0){
+//                if(targetX >= odo.getPosX()) break;
+//            } else {
+//                if(targetX <= odo.getPosX()) break;
+//            }
+//        }
+//        setPower(0,0,0,0);
+//        int target = odoHeading - orgHeading;
+//        turn(target, telemetry);
+//    }
     // for debugging
     public void move(double x, float power, Telemetry telemetry){
         odo.update();
@@ -144,7 +144,7 @@ public class Drivetrain implements Mechanism{
         }
         setPower(0,0,0,0);
         int target = odoHeading - orgHeading;
-        turn(target);
+        turn(target, power, telemetry);
     }
     //    public void move(double distance){
 //        startEncoder();
@@ -169,18 +169,20 @@ public class Drivetrain implements Mechanism{
     interface inlineFunc {
         int run(double doubl);
     }
-    public void turn(int degrees){
+    public void turn(int degrees, double power, Telemetry telemetry){
         odo.update();
         inlineFunc heading = (radians) -> (int) (radians * (180/Math.PI));
         int odoHeading = heading.run(odo.getHeading());
-        double targetHeading = odoHeading;
+        double targetHeading = odoHeading + degrees;
 
-        double leftMotorPower = degrees == 0 ? 0 : targetHeading > odoHeading ? -1 : 1;
-        double rightMotorPower = degrees == 0 ? 0 : targetHeading > odoHeading ? 1 : -1;
+        double leftMotorPower = degrees == 0 ? 0 : targetHeading > odoHeading ? -1* power: 1* power;
+        double rightMotorPower = degrees == 0 ? 0 : targetHeading > odoHeading ? 1 * power: -1 * power;
         setPower(leftMotorPower, rightMotorPower, rightMotorPower, leftMotorPower);
         if(degrees != 0){
             while (true) {
                 odo.update();
+                updateOdo(telemetry);
+                odoHeading = heading.run(odo.getHeading());
                 if (degrees < 0) {
                     if (targetHeading >= odoHeading) break;
                 } else {

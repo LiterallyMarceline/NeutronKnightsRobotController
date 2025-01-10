@@ -85,8 +85,8 @@ public class Robot implements Mechanism{
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
-        double leftPower = gamepad1.right_trigger - gamepad1.left_trigger;
-        double rightPower = gamepad1.left_trigger - gamepad1.right_trigger;
+        double leftPower = gamepad1.left_trigger - gamepad1.right_trigger;
+        double rightPower = gamepad1.right_trigger - gamepad1.left_trigger;
 
         double topLeftPower = positivePower + rightPower;
         double bottomRightPower = positivePower + leftPower;
@@ -128,12 +128,12 @@ public class Robot implements Mechanism{
         switch(bar){
             case HIGH:
                 int forwardDistance = 500;
-                int forward = 50;
-                int reverse = 20;
-                int reverseDistance = -550;
 
-                //arm.setPosition(armPositionBar);
+                int reverse = -20;
+                int reverseDistance = -450;
+
                 move(forwardDistance, .25f, telemetry);
+                drivetrain.turn(15, 0.25, telemetry);
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
@@ -146,29 +146,35 @@ public class Robot implements Mechanism{
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                intake.intake(0.5);
+                intake.intake(1);
+                try {
+                    Thread.sleep(2 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                intake.intake(0.25);
+                arm.setPosition(armPositionBar+50);
+                intake.intake(0);
+                move(reverseDistance, .25f, telemetry);
+                intake.intake(0.25);
+                arm.setPosition(-(armPositionDown+50));
                 try {
                     Thread.sleep(1 * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
-                arm.setPosition(armPositionBar+20);
-                move(reverse, .25f, telemetry);
                 intake.intake(0);
+                //drivetrain.turn(10, 0.25, telemetry);
+
                 //move(reverse, .25f, telemetry);
 
-                move(reverseDistance, .25f, telemetry);
-                move(forward, .25f, telemetry);
-
-                arm.setPosition(armPositionDown);
-//                move(reverseDistance, .5f);
-//                intake.turnOff();
         }
     }
-    public void move(int distance, float power){
-        drivetrain.move(distance, power);
-    }
+//    public void move(int distance, float power){
+//        drivetrain.move(distance, power);
+//    }
     public void move(int distance, float power, Telemetry telemetry){
         drivetrain.move(distance, power, telemetry);
     }
