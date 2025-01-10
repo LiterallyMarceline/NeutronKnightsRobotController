@@ -27,7 +27,7 @@ public class Intake implements Mechanism {
      */
     public void setPower(double power){
         try {
-            intakeServoLeft.setPower(-power);
+            intakeServoLeft.setPower(power);
             intakeServoRight.setPower(power);
         } catch(Exception e){
             System.out.println("Intake is currently unavailable, because the robot is unable to find the intake servos.  ");
@@ -40,11 +40,11 @@ public class Intake implements Mechanism {
     }
     public void intake(double power){
         intakeServoLeft.setPower(power);
-        intakeServoRight.setPower(-power);
+        intakeServoRight.setPower(power);
     }
     public void eject(double power) {
         intakeServoLeft.setPower(-power);
-        intakeServoRight.setPower(power);
+        intakeServoRight.setPower(-power);
 
     }
 }

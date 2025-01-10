@@ -41,7 +41,7 @@ public class Drivetrain implements Mechanism{
         bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
-        odo.setOffsets(125.0, 90.0);
+        odo.setOffsets(125.0, 100.0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.resetPosAndIMU();
@@ -194,6 +194,7 @@ public class Drivetrain implements Mechanism{
 
     }
     public void updateOdo(Telemetry telemetry){
+        odo.update();
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset", odo.getXOffset());
         telemetry.addData("Y offset", odo.getYOffset());

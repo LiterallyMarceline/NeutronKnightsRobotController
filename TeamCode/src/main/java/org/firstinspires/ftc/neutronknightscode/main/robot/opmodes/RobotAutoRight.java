@@ -18,7 +18,7 @@ public class RobotAutoRight extends RobotOpMode {
             robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
             // start procedure to move samples into observation zone
-//            robot.strafe(35);
+//            robot.strafe(400);
 //            robot.arm.setPosition(robot.armPositionBar);
 //            robot.move(25, .5f);
 //            robot.strafe(5);

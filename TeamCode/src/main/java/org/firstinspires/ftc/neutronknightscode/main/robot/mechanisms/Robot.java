@@ -17,6 +17,8 @@ public class Robot implements Mechanism{
     public boolean ejectSlow = false;
     public boolean direction = true;
 
+    //update these bottom values
+    //then test going back
     public final int armPositionDown = 4694;
     public final int armPositionBar = 2900;
     public final int armPositionBasket = 2725;
@@ -117,13 +119,13 @@ public class Robot implements Mechanism{
     public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
-                int forwardDistance = 100;
-                int reverseDistance = 5;
+                int forwardDistance = 430;
+                int reverseDistance = 50;
 
                 //arm.setPosition(armPositionBar);
-                move(forwardDistance, .5f, telemetry);
-//                arm.setPosition(armPositionBasket);
-//                move(reverseDistance, .5f);
+                move(forwardDistance, .25f, telemetry);
+                arm.setPosition(armPositionBar);
+                move(reverseDistance, .25f, telemetry);
 //                intake.eject(0.5);
 //                arm.setPosition(armPositionDown);
 //                move(reverseDistance, .5f);
