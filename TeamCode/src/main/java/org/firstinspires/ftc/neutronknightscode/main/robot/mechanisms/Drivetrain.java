@@ -131,7 +131,7 @@ public class Drivetrain implements Mechanism{
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
         int odoHeading = heading.run(odo.getHeading());
         int orgHeading = odoHeading;
-        double motorPower = x == 0 ? 0 : targetX > odo.getPosY() ? -1 * power : 1 * power;
+        double motorPower = x == 0 ? 0 : targetX > odo.getPosX() ? -1 * power : 1 * power;
         setPower(motorPower,motorPower,motorPower,motorPower);
         while(true){
             odo.update();

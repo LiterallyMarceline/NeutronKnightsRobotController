@@ -34,7 +34,10 @@ public class RobotTeleOp extends RobotOpMode {
 
 
         if (currentGamepad1.a && !previousGamepad1.a) {
-            robot.toggleInvert();
+            robot.toggleInvert1();
+        }
+        if (currentGamepad1.b && !previousGamepad1.b) {
+            robot.toggleInvert2();
         }
         if(currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
             robot.toggleSlow();

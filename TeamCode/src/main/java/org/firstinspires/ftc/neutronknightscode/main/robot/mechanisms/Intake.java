@@ -39,12 +39,12 @@ public class Intake implements Mechanism {
         intakeServoRight.setPower(0);
     }
     public void intake(double power){
-        intakeServoLeft.setPower(power);
-        intakeServoRight.setPower(power);
-    }
-    public void eject(double power) {
         intakeServoLeft.setPower(-power);
         intakeServoRight.setPower(-power);
+    }
+    public void eject(double power) {
+        intakeServoLeft.setPower(power);
+        intakeServoRight.setPower(power);
 
     }
 }

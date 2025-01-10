@@ -12,16 +12,17 @@ public class Robot implements Mechanism{
     public Arm arm;
     public Intake intake;
 
-    public boolean inverted = false;
+    public boolean inverted1 = false;
+    public boolean inverted2 = false;
     public boolean slow = false;
     public boolean ejectSlow = false;
     public boolean direction = true;
 
     //update these bottom values
     //then test going back
-    public final int armPositionDown = 4694;
-    public final int armPositionBar = 2900;
-    public final int armPositionBasket = 2725;
+    public final int armPositionDown = 5138;
+    public final int armPositionBar = 3336;
+    public final int armPositionBasket = 3160;
 
     public Robot(){
         drivetrain = new Drivetrain();
@@ -34,8 +35,12 @@ public class Robot implements Mechanism{
         arm.init(hardwareMap);
         intake.init(hardwareMap);
     }
-    public void toggleInvert(){
-        inverted = !inverted;
+    public void toggleInvert1(){
+        inverted1 = !inverted1;
+    }
+    public void toggleInvert2(){
+
+        inverted2 = !inverted2;
     }
     public void toggleSlow(){
         slow = !slow;
@@ -62,6 +67,21 @@ public class Robot implements Mechanism{
         right_trigger = right_trigger/3;
         left_trigger = left_trigger/3;
 
+        right_trigger = left_trigger/2;
+        left_trigger = right_trigger/2;
+
+        if(inverted1){
+            right_stick_x = -right_stick_x;
+            right_stick_y = -right_stick_y;
+        }
+
+        if(inverted2){
+            right_trigger = -right_trigger;
+            left_trigger = -left_trigger;
+        }
+
+
+
         double positivePower = gamepad1.right_stick_y - gamepad1.right_stick_x;
         double negativePower = gamepad1.right_stick_y + gamepad1.right_stick_x;
 
@@ -73,23 +93,11 @@ public class Robot implements Mechanism{
         double topRightPower = negativePower + leftPower;
         double bottomLeftPower = negativePower + rightPower;
 
-        topLeftPower = -topLeftPower;
-        bottomRightPower = -bottomRightPower;
-        topRightPower = -topRightPower;
-        bottomLeftPower = -bottomLeftPower;
-
         if(slow){
             topLeftPower /= 2;
             bottomRightPower /= 2;
             topRightPower /= 2;
             bottomLeftPower /= 2;
-        }
-
-        if(inverted){
-            topLeftPower = -topLeftPower;
-            bottomRightPower = -bottomRightPower;
-            topRightPower = -topRightPower;
-            bottomLeftPower = -bottomLeftPower;
         }
 
         drivetrain.setPower(
@@ -119,15 +127,41 @@ public class Robot implements Mechanism{
     public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
-                int forwardDistance = 430;
-                int reverseDistance = 50;
+                int forwardDistance = 500;
+                int forward = 50;
+                int reverse = 20;
+                int reverseDistance = -550;
 
                 //arm.setPosition(armPositionBar);
                 move(forwardDistance, .25f, telemetry);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 arm.setPosition(armPositionBar);
+                try {
+                    Thread.sleep(2 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                intake.intake(0.5);
+                try {
+                    Thread.sleep(1 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                arm.setPosition(armPositionBar+20);
+                move(reverse, .25f, telemetry);
+                intake.intake(0);
+                //move(reverse, .25f, telemetry);
+
                 move(reverseDistance, .25f, telemetry);
-//                intake.eject(0.5);
-//                arm.setPosition(armPositionDown);
+                move(forward, .25f, telemetry);
+
+                arm.setPosition(armPositionDown);
 //                move(reverseDistance, .5f);
 //                intake.turnOff();
         }
