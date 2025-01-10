@@ -9,7 +9,7 @@ public class RobotAutoLeft extends RobotOpMode {
 
     private boolean ran = false;
 
-    int forward = 20;
+    int forward = 25;
     public void loop() {
         int i = 1;
 
@@ -19,6 +19,11 @@ public class RobotAutoLeft extends RobotOpMode {
 
             robot.move(forward, .25f, telemetry);
             robot.strafe(9);
+            robot.move(1100, .25f, telemetry);
+            robot.drivetrain.turn(-85,.25, telemetry);
+            robot.move(70, .25f, telemetry);
+            robot.arm.setPosition(robot.armPositionBar);
+
 
             // start procedure to move samples into observation zone
 //            robot.strafe(40);

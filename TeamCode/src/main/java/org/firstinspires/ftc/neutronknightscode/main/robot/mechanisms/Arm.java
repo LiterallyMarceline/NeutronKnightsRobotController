@@ -19,7 +19,7 @@ public class Arm implements Mechanism {
     private MotorEncoder slideEncoder;
 
     private boolean autoSetPosition = false;
-    private boolean rotationAutoSetPosition = false;
+    private boolean rotationAutoSetPosition = true;
 
     // Important Variables!
     public static volatile double pivotPosition;

@@ -130,7 +130,7 @@ public class Robot implements Mechanism{
                 int forwardDistance = 500;
 
                 int reverse = -20;
-                int reverseDistance = -450;
+                int reverseDistance = -400;
 
                 move(forwardDistance, .25f, telemetry);
                 drivetrain.turn(15, 0.25, telemetry);
