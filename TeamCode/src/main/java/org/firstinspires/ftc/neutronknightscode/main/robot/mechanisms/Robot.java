@@ -20,7 +20,7 @@ public class Robot implements Mechanism{
 
     //update these bottom values
     //then test going back
-    public final int armPositionDown = 5138;
+    public final int armPositionDown = 5085;
     public final int armPositionBar = 3336;
     public final int armPositionBasket = 3160;
 
@@ -172,7 +172,7 @@ public class Robot implements Mechanism{
 
         }
     }
-//    public void move(int distance, float power){
+    //    public void move(int distance, float power){
 //        drivetrain.move(distance, power);
 //    }
     public void move(int distance, float power, Telemetry telemetry){

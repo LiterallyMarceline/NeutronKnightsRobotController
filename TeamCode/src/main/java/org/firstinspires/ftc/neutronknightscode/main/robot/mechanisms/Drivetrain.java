@@ -104,7 +104,7 @@ public class Drivetrain implements Mechanism{
         topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-//    public void move(double x, float power){
+    //    public void move(double x, float power){
 //        odo.update();
 //        double targetX = odo.getPosX() + x;
 //        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
@@ -216,4 +216,4 @@ public class Drivetrain implements Mechanism{
 }
 /*odo.update();
 
-*/
+ */

@@ -42,4 +42,3 @@ public class RobotAutoLeft extends RobotOpMode {
         robot.drivetrain.updateOdo(telemetry);
     }
 }
-

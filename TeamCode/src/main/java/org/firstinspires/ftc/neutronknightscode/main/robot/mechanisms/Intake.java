@@ -1,4 +1,4 @@
- package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
+package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
