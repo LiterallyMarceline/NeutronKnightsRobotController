@@ -23,14 +23,16 @@ public class Drivetrain implements Mechanism{
     private DcMotor bottomLeft;
 
     private volatile Point position;
-    private final MotorEncoder drivetrainEncoder = new MotorEncoder(538, 1);
+    private MotorEncoder drivetrainEncoder;
 
     private volatile float heading;
     private volatile float pitch;
 
     private double maxSpeed;
 
-    public Drivetrain(){}
+    public Drivetrain(){
+        drivetrainEncoder = new MotorEncoder(538, 1);
+    }
 
     @Override
     public void init(HardwareMap hardwareMap) {

@@ -7,10 +7,12 @@ import org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms.Robot;
 
 public abstract class RobotOpMode extends OpMode {
 
-    public Robot robot = new Robot();
+    public Robot robot;
 
     @Override
     public void init() {
+        robot = new Robot();
         robot.init(hardwareMap);
+
     }
 }

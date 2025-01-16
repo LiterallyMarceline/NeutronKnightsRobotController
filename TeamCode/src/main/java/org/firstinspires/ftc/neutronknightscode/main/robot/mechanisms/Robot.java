@@ -23,6 +23,9 @@ public class Robot implements Mechanism{
     public final int armPositionDown = 5085;
     public final int armPositionBar = 3336;
     public final int armPositionBasket = 3160;
+    public final int armPositionWall = 300;
+
+
 
     public Robot(){
         drivetrain = new Drivetrain();
@@ -127,18 +130,8 @@ public class Robot implements Mechanism{
     public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
-                int forwardDistance = 500;
 
-                int reverse = -20;
                 int reverseDistance = -400;
-
-                move(forwardDistance, .25f, telemetry);
-                drivetrain.turn(15, 0.25, telemetry);
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
 
                 arm.setPosition(armPositionBar);
                 try {
@@ -166,9 +159,7 @@ public class Robot implements Mechanism{
                     throw new RuntimeException(e);
                 }
                 intake.intake(0);
-                //drivetrain.turn(10, 0.25, telemetry);
 
-                //move(reverse, .25f, telemetry);
 
         }
     }

@@ -15,10 +15,36 @@ public class RobotAutoRight extends RobotOpMode {
 
         if(!ran) {
             // hang the specimen
+            int forwardDistance = 500;
+
+            int reverse = -20;
+            int reverseDistance = -400;
+
+            robot.move(forwardDistance, .25f, telemetry);
+            robot.drivetrain.turn(15, 0.25, telemetry);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
             robot.move(forward, .25f, telemetry);
-            robot.strafe(-15);
+
+            robot.strafe(-300);
+
+
+           // robot.drivetrain.turn(-80, .5, telemetry);
+           // robot.move(350, .25f, telemetry);
+            robot.arm.setPosition(robot.armPositionWall);
+
+            robot.intake.intake(.5);
+            robot.strafe(50);
+            robot.move(200, .25f, telemetry);
+            robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
+
+
 
             // start procedure to move samples into observation zone
 //            robot.strafe(40);

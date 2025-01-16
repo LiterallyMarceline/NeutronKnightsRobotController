@@ -19,10 +19,11 @@ public class RobotAutoLeft extends RobotOpMode {
 
             robot.move(forward, .25f, telemetry);
             robot.strafe(9);
-            robot.move(1100, .25f, telemetry);
-            robot.drivetrain.turn(-85,.25, telemetry);
-            robot.move(70, .25f, telemetry);
+            robot.move(1400, .25f, telemetry);
+            robot.drivetrain.turn(-65,.25, telemetry);
             robot.arm.setPosition(robot.armPositionBar);
+            robot.move(10, .10f, telemetry);
+
 
 
             // start procedure to move samples into observation zone

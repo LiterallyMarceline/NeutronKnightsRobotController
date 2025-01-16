@@ -65,6 +65,11 @@ public class RobotTeleOp extends RobotOpMode {
         if (gamepad2.dpad_right) {
             robot.arm.setPosition(robot.armPositionBar);
         }
+        if (gamepad2.circle) {
+            robot.arm.setPosition(robot.armPositionWall);
+        }
+
+
 
     }
 }
