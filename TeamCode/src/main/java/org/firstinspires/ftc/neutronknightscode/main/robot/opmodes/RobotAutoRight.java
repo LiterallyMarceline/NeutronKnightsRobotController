@@ -36,7 +36,6 @@ public class RobotAutoRight extends RobotOpMode {
 
 
            // robot.drivetrain.turn(-80, .5, telemetry);
-           // robot.move(350, .25f, telemetry);
             robot.arm.setPosition(robot.armPositionWall);
 
             robot.intake.intake(.5);
