@@ -12,7 +12,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Locale;
+import java.util.Timer;
+
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.Instant;
+
 
 public class Drivetrain implements Mechanism{
 
@@ -141,7 +149,55 @@ public class Drivetrain implements Mechanism{
             if(x < 0){
                 if(targetX >= odo.getPosX()) break;
             } else {
-                if(targetX <= odo.getPosX()) break;
+                if(targetX <= odo.getPosX())
+
+                    break;
+            }
+            if()
+            {
+                break;
+            }
+        }
+        setPower(0,0,0,0);
+        int target = odoHeading - orgHeading;
+        turn(target, power, telemetry);
+    }
+
+    public void time(LocalTime dif)
+    {
+        // ... some code
+        Duration duration = Duration.between(0, 10);
+
+
+
+        while(Instant.now() <= duration.getSeconds())
+        {
+
+        }
+
+    }
+
+    public void odoStrafe(double y, float power, Telemetry telemetry){
+        odo.update();
+        double targetY = odo.getPosY() + y;
+        inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
+        int odoHeading = heading.run(odo.getHeading());
+        int orgHeading = odoHeading;
+        double motorPower = y == 0 ? 0 : targetY > odo.getPosY() ? -1 * power : 1 * power;
+        setPower(motorPower*-1,motorPower*-1,motorPower,motorPower);
+        while(true){
+            odo.update();
+            updateOdo(telemetry);
+            if(y < 0){
+                if(targetY >= odo.getPosY()) {
+                    telemetry.addData("Break", "BreakGreater");
+                    break;
+                }
+            } else {
+                if(targetY <= odo.getPosY()) {
+                    telemetry.addData("Break", "BreakLesser");
+                    break;
+                }
             }
         }
         setPower(0,0,0,0);

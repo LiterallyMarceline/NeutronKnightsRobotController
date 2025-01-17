@@ -27,6 +27,7 @@ public class RobotTeleOp extends RobotOpMode {
         currentGamepad2.copy(gamepad2);
 
         telemetry.addData("power", "%f power", -gamepad2.right_stick_y);
+        telemetry.addData("slider pos:", "%d", robot.arm.slideMotor.getCurrentPosition());
         telemetry.update();
 
         // telemetry.addData("position", "%f pos", Arm.pivotPosition);

@@ -8,9 +8,14 @@ import org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms.Robot;
 @Autonomous
 public class RobotAutoNothing extends RobotOpMode {
 
-
+    private boolean ran = false;
     public void loop() {
         //this does nothing
+        if(!ran){
+            robot.drivetrain.odoStrafe(-1000, .5f, telemetry);
+            ran = true;
+        }
+        robot.drivetrain.updateOdo(telemetry);
     }
 
 }

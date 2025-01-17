@@ -13,13 +13,16 @@ public class Arm implements Mechanism {
     // Creating the motors and servos objects.
     // private Servo BaseServo; @Deprecated
     private DcMotor pivotMotor;
-    private DcMotor slideMotor;
+    public DcMotor slideMotor;
     private DcMotor rotationMotor;
     private MotorEncoder pivotEncoder;
     private MotorEncoder slideEncoder;
 
     private boolean autoSetPosition = false;
     private boolean rotationAutoSetPosition = true;
+
+    private int slidePositionToKeep = 0;
+    private boolean keepSlidePosition = false;
 
     // Important Variables!
     public static volatile double pivotPosition;
@@ -29,17 +32,22 @@ public class Arm implements Mechanism {
     private int positionToKeep = 0;
     private int rotationPositionToKeep = 0;
 
+    private int maxSlide = 1924;
+    private int minSlide = 0;
+
     @Override
     public void init(HardwareMap hardwareMap) {
         // Configuring motors and servos.
         // BaseServo = hardwareMap.get(Servo.class, "BaseServo2"); @Deprecated
         try {
-            pivotMotor = hardwareMap.get(DcMotor.class, "pivotMotor");
-            //slideMotor = hardwareMap.get(DcMotor.class, "slideMotor");
 
-            rotationMotor = hardwareMap.get(DcMotor.class,"rotationMotor");
+            // tryGet will not fail if not found
+            pivotMotor = hardwareMap.tryGet(DcMotor.class, "pivotMotor");
+            slideMotor = hardwareMap.tryGet(DcMotor.class,"slideMotor");
+            rotationMotor = hardwareMap.tryGet(DcMotor.class,"rotationMotor");
+
         } catch (Exception e){
-            System.out.println("Either the pivot motor, or the rotation servo, have not been located.");
+            System.out.println("Either the pivot motor, rotation motor, or the slide motor, have not been located.");
             return;
         }
         // Configuring the encoders for future encoding.. I guess..
@@ -73,13 +81,12 @@ public class Arm implements Mechanism {
         // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rotationMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Not in use yet;
         /*
         double pivotMax;
         double pivotMin;
          */
-        double slideMax;
-        double slideMin;
 
         // testing set to position
         if(pivotPower < 0)
@@ -123,19 +130,76 @@ public class Arm implements Mechanism {
             System.out.println("Pivot is currently unavailable, because the robot is unable to find the pivot motor.  ");
         }
     }
-    @Deprecated
-    public void slide(long rotations) throws InterruptedException {
-        // Get the amount IN ROTATIONS: as a double
 
-        if (slidePosition >= 0) {
-            if (slidePosition <= 1) {
-                slideMotor.setPower(rotations/Math.abs(rotations));
-                Thread.sleep(512 * rotations);
-                slideMotor.setPower(0);
-                slidePosition += rotations/7;
+    public void slide(double slidePower, Telemetry telemetry) throws InterruptedException {
+
+        // get current location
+        int currentSlidePosition = slideMotor.getCurrentPosition();
+//        if ( expand < 0 ) {
+//            // retracting
+//            if (currentSlidePosition <= minSlide) // don't move anymore
+//                return;
+//            else {
+//                slideMotor.setTargetPosition(maxSlide);
+//                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                slideMotor.setPower(.2);
+//                slidePositionToKeep = slideMotor.getCurrentPosition();
+//                keepSlidePosition = true;
+//            }
+//        } else if ( expand > 0 ) {
+//            // expanding
+//            if ( currentSlidePosition >= maxSlide )
+//                return;
+//            else {
+//                slideMotor.setTargetPosition(minSlide);
+//                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                slideMotor.setPower(.2);
+//                slidePositionToKeep = slideMotor.getCurrentPosition();
+//                keepSlidePosition = true;
+//            }
+//        } else {
+//            // hold position
+//            if(keepSlidePosition)
+//            {
+//                slideMotor.setTargetPosition(slidePositionToKeep);
+//                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                slideMotor.setPower(.2);
+//            }
+//        }
+
+        if(slidePower < 0)
+        {
+            keepSlidePosition = true;
+            slideMotor.setTargetPosition(slideMotor.getCurrentPosition()-100);
+            slidePositionToKeep = slideMotor.getCurrentPosition();
+            slideMotor.setPower(slidePower);
+        } else if(slidePower > 0){
+            keepSlidePosition = true;
+            slideMotor.setTargetPosition(slideMotor.getCurrentPosition()+100);
+            slidePositionToKeep = slideMotor.getCurrentPosition();
+            slideMotor.setPower(slidePower);
+        } else
+        {
+            if(keepSlidePosition)
+            {
+                slideMotor.setTargetPosition(slidePositionToKeep);
+                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                slideMotor.setPower(.2);
             }
-            // TO BE FIXED LATER.. GET RID OF TIME AND USE DISTANCE
         }
+//        if (slidePosition >= 0) {
+//            if (slidePosition <= 1) {
+//                slideMotor.setPower(rotations/Math.abs(rotations));
+//                Thread.sleep(512 * rotations);
+//                slideMotor.setPower(0);
+//                slidePosition += rotations/7;
+//            }
+//            // TO BE FIXED LATER.. GET RID OF TIME AND USE DISTANCE
+//        }
     }
 
     public void rotate(double amount) {
