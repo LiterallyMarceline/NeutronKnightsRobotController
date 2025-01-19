@@ -13,7 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 import java.util.Locale;
-import java.time.Instant;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 public class Drivetrain implements Mechanism{
@@ -129,7 +130,7 @@ public class Drivetrain implements Mechanism{
 //        turn(target, telemetry);
 //    }
     // for debugging
-    public void move(double x, float power, Telemetry telemetry){
+    public void move(double x, float power, long timeout, Telemetry telemetry){
         odo.update();
 
         double targetX = odo.getPosX() + x;
@@ -139,29 +140,30 @@ public class Drivetrain implements Mechanism{
         double motorPower = x == 0 ? 0 : targetX > odo.getPosX() ? -1 * power : 1 * power;
         setPower(motorPower,motorPower,motorPower,motorPower);
         // get time, add timeout
-        long now = Instant.now().getEpochSecond();
-        long timeout = now+10;
-        while(true){
+        long startNanoTime = System.nanoTime();
+        while(true) {
             odo.update();
-            now = Instant.now().getEpochSecond();
+            long currentNanoTime = System.nanoTime();
+            long durationSeconds = (currentNanoTime - startNanoTime) / 1_000_000_000;
             updateOdo(telemetry);
-            if(x < 0){
-                if(targetX >= odo.getPosX()) break;
-            } else {
-                if(targetX <= odo.getPosX())
 
-                    break;
-            }
-            if(now >= timeout)
-            {
+            // timeout
+            if (durationSeconds >= timeout)
                 break;
+
+            if (x < 0) {
+                if (targetX >= odo.getPosX())
+                    break;
+            } else {
+                if (targetX <= odo.getPosX())
+                    break;
             }
         }
         setPower(0,0,0,0);
         int target = odoHeading - orgHeading;
         turn(target, power, telemetry);
     }
-    public void strafe(double y, float power, Telemetry telemetry){
+    public void strafe(double y, float power, long timeout, Telemetry telemetry){
         odo.update();
         double targetY = odo.getPosY() + y;
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
@@ -169,9 +171,15 @@ public class Drivetrain implements Mechanism{
         int orgHeading = odoHeading;
         double motorPower = y == 0 ? 0 : targetY > odo.getPosY() ? -1 * power : 1 * power;
         setPower(motorPower*-1,motorPower*-1,motorPower,motorPower);
+        long startNanoTime = System.nanoTime();
         while(true){
             odo.update();
+            long currentNanoTime = System.nanoTime();
+            long durationSeconds = (currentNanoTime - startNanoTime) / 1_000_000_000;
             updateOdo(telemetry);
+            if (durationSeconds >= timeout)
+                break;
+
             if(y < 0){
                 if(targetY >= odo.getPosY()) {
                     telemetry.addData("Break", "BreakGreater");

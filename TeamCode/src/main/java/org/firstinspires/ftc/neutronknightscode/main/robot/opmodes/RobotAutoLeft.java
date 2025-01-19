@@ -17,12 +17,12 @@ public class RobotAutoLeft extends RobotOpMode {
             // hang the specimen
             robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
-            robot.move(forward, .25f, telemetry);
-            robot.strafe(9, .25f,telemetry);
-            robot.move(1400, .25f, telemetry);
+            robot.move(forward, .25f, 10, telemetry);
+            robot.strafe(9, .25f,10, telemetry);
+            robot.move(1400, .25f,10, telemetry);
             robot.drivetrain.turn(-65,.25, telemetry);
             robot.arm.setPosition(robot.armPositionBar);
-            robot.move(10, .10f, telemetry);
+            robot.move(10, .10f,10, telemetry);
 
 
 

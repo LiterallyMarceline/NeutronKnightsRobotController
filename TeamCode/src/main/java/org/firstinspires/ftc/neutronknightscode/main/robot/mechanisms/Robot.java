@@ -150,7 +150,7 @@ public class Robot implements Mechanism{
                 intake.intake(0.25);
                 arm.setPosition(armPositionBar+50);
                 intake.intake(0);
-                move(reverseDistance, .25f, telemetry);
+                move(reverseDistance, .25f, 10, telemetry);
                 intake.intake(0.25);
                 arm.setPosition(-(armPositionDown+50));
                 try {
@@ -166,11 +166,11 @@ public class Robot implements Mechanism{
     //    public void move(int distance, float power){
 //        drivetrain.move(distance, power);
 //    }
-    public void move(int distance, float power, Telemetry telemetry){
-        drivetrain.move(distance, power, telemetry);
+    public void move(int distance, float power, long timeout, Telemetry telemetry){
+        drivetrain.move(distance, power, timeout, telemetry);
     }
-    public void strafe(double distance, float power, Telemetry telemetry){
-        drivetrain.strafe(distance, power, telemetry);
+    public void strafe(double distance, float power, long timeout, Telemetry telemetry){
+        drivetrain.strafe(distance, power, 10, telemetry);
     }
 
     public void scoreBasket(Heights basket){

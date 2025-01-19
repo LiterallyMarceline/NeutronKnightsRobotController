@@ -21,7 +21,7 @@ public class RobotAutoRight extends RobotOpMode {
             int reverseDistance = -400;
 
 
-            robot.move(forwardDistance, .25f, telemetry);
+            robot.move(forwardDistance, .25f,10, telemetry);
             robot.drivetrain.turn(15, 0.25, telemetry);
             try {
                 Thread.sleep(200);
@@ -31,9 +31,10 @@ public class RobotAutoRight extends RobotOpMode {
 
             robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
-            robot.move(forward, .25f, telemetry);
+            robot.move(forward, .25f,10, telemetry);
 
-            robot.drivetrain.odoStrafe(-1600, .5f, telemetry);
+            robot.drivetrain.strafe(-1600, .5f,10, telemetry);
+            robot.move(-50,.25f,10, telemetry);
 
 
            // robot.drivetrain.turn(-80, .5, telemetry);
@@ -47,9 +48,9 @@ public class RobotAutoRight extends RobotOpMode {
             }
             robot.intake.intake(0);
 
-            //robot.strafe(1600);
-            //robot.move(200, .25f, telemetry);
-            //robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
+            robot.strafe(1600, 0.25f, 10, telemetry );
+            robot.move(200, .25f,10, telemetry);
+            robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
             //To move samples into zone
             //robot.move(-200, .25f, telemetry);
