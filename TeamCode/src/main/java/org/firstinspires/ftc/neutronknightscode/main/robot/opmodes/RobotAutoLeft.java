@@ -18,7 +18,7 @@ public class RobotAutoLeft extends RobotOpMode {
             robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
             robot.move(forward, .25f, telemetry);
-            robot.strafe(9);
+            robot.strafe(9, .25f,telemetry);
             robot.move(1400, .25f, telemetry);
             robot.drivetrain.turn(-65,.25, telemetry);
             robot.arm.setPosition(robot.armPositionBar);

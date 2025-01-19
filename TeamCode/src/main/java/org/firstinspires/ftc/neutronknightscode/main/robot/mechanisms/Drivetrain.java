@@ -12,13 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
-import java.sql.Time;
-import java.time.LocalTime;
 import java.util.Locale;
-import java.util.Timer;
-
-import java.time.Duration;
-import java.time.LocalTime;
 import java.time.Instant;
 
 
@@ -137,14 +131,19 @@ public class Drivetrain implements Mechanism{
     // for debugging
     public void move(double x, float power, Telemetry telemetry){
         odo.update();
+
         double targetX = odo.getPosX() + x;
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
         int odoHeading = heading.run(odo.getHeading());
         int orgHeading = odoHeading;
         double motorPower = x == 0 ? 0 : targetX > odo.getPosX() ? -1 * power : 1 * power;
         setPower(motorPower,motorPower,motorPower,motorPower);
+        // get time, add timeout
+        long now = Instant.now().getEpochSecond();
+        long timeout = now+10;
         while(true){
             odo.update();
+            now = Instant.now().getEpochSecond();
             updateOdo(telemetry);
             if(x < 0){
                 if(targetX >= odo.getPosX()) break;
@@ -153,7 +152,7 @@ public class Drivetrain implements Mechanism{
 
                     break;
             }
-            if()
+            if(now >= timeout)
             {
                 break;
             }
@@ -162,22 +161,7 @@ public class Drivetrain implements Mechanism{
         int target = odoHeading - orgHeading;
         turn(target, power, telemetry);
     }
-
-    public void time(LocalTime dif)
-    {
-        // ... some code
-        Duration duration = Duration.between(0, 10);
-
-
-
-        while(Instant.now() <= duration.getSeconds())
-        {
-
-        }
-
-    }
-
-    public void odoStrafe(double y, float power, Telemetry telemetry){
+    public void strafe(double y, float power, Telemetry telemetry){
         odo.update();
         double targetY = odo.getPosY() + y;
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
@@ -203,26 +187,6 @@ public class Drivetrain implements Mechanism{
         setPower(0,0,0,0);
         int target = odoHeading - orgHeading;
         turn(target, power, telemetry);
-    }
-    //    public void move(double distance){
-//        startEncoder();
-//
-//        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-//        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-//        int topRightTarget = topRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-//        int bottomLeftTarget = bottomLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-//
-//        runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
-//    }
-    public void strafe(double distance){
-        startEncoder();
-
-        int topLeftTarget = topLeft.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int bottomRightTarget = bottomRight.getCurrentPosition() + (int)(distance * drivetrainEncoder.ticksPerCm);
-        int topRightTarget = topRight.getCurrentPosition() - (int)(distance * drivetrainEncoder.ticksPerCm);
-        int bottomLeftTarget = bottomLeft.getCurrentPosition() - (int)(distance * drivetrainEncoder.ticksPerCm);
-
-        runToPosition(topLeftTarget,bottomRightTarget,topRightTarget,bottomLeftTarget);
     }
     interface inlineFunc {
         int run(double doubl);

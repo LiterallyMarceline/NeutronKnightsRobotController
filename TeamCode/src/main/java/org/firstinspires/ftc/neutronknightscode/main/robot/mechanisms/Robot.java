@@ -169,8 +169,8 @@ public class Robot implements Mechanism{
     public void move(int distance, float power, Telemetry telemetry){
         drivetrain.move(distance, power, telemetry);
     }
-    public void strafe(double distance){
-        drivetrain.strafe(distance);
+    public void strafe(double distance, float power, Telemetry telemetry){
+        drivetrain.strafe(distance, power, telemetry);
     }
 
     public void scoreBasket(Heights basket){

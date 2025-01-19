@@ -12,7 +12,7 @@ public class RobotAutoNothing extends RobotOpMode {
     public void loop() {
         //this does nothing
         if(!ran){
-            robot.drivetrain.odoStrafe(-1000, .5f, telemetry);
+            robot.move(5000,0.25f,telemetry);
             ran = true;
         }
         robot.drivetrain.updateOdo(telemetry);
