@@ -131,7 +131,7 @@ public class Robot implements Mechanism{
         switch(bar){
             case HIGH:
 
-                int reverseDistance = -400;
+                int reverseDistance = -350;
 
                 arm.setPosition(armPositionBar);
                 try {
@@ -147,14 +147,21 @@ public class Robot implements Mechanism{
                 }
 
 
-                intake.intake(0.25);
+                intake.intake(0.5);
                 arm.setPosition(armPositionBar+50);
                 intake.intake(0);
                 move(reverseDistance, .25f, 10, telemetry);
-                intake.intake(0.25);
+                intake.intake(0.5);
                 arm.setPosition(-(armPositionDown+50));
                 try {
                     Thread.sleep(1 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                intake.intake(0.5);
+                arm.setPosition(-(armPositionDown+100));
+                try {
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
