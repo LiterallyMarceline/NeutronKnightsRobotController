@@ -118,7 +118,7 @@ public class Robot implements Mechanism{
 
         arm.setPower(-gamepad2.right_stick_y, telemetry );
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
-        arm.slide(-gamepad2.left_stick_y, telemetry);
+        //arm.slide(-gamepad2.left_stick_y, telemetry);
         arm.rotate(gamepad2.left_stick_x);
 
         //arm.slide((long) gamepad2.left_stick_y*360);

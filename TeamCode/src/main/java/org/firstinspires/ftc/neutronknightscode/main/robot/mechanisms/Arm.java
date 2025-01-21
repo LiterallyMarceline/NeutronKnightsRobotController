@@ -93,13 +93,17 @@ public class Arm implements Mechanism {
         {
             autoSetPosition = false;
             pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()-200);
+            slideMotor.setTargetPosition(slideMotor.getCurrentPosition()+200);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
+            slideMotor.setPower(pivotPower*-1);
         } else if(pivotPower > 0){
             autoSetPosition = false;
             pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
+            slideMotor.setTargetPosition(slideMotor.getCurrentPosition()-200);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
+            slideMotor.setPower(pivotPower*-1);
         } else
         {
             if(!autoSetPosition)
@@ -114,6 +118,10 @@ public class Arm implements Mechanism {
 
         telemetry.addData("arm power", "%f power", pivotPower);
         telemetry.addData("arm pos", "%d pos", pivotMotor.getCurrentPosition());
+
+        telemetry.addData("arm power", "%f power", pivotPower*-1);
+        telemetry.addData("arm pos", "%d pos", slideMotor.getCurrentPosition());
+
         telemetry.update();
         // Not in use yet
         /*if(pivotMin <= pivotPosition && pivotPosition <= pivotMax)*/
@@ -125,7 +133,7 @@ public class Arm implements Mechanism {
     public void pivot(double amount) {
         try {
             pivotMotor.setPower(amount);
-
+            slideMotor.setPower(amount*-1);
         } catch(Exception e){
             System.out.println("Pivot is currently unavailable, because the robot is unable to find the pivot motor.  ");
         }
@@ -191,6 +199,7 @@ public class Arm implements Mechanism {
                 slideMotor.setPower(.2);
             }
         }
+
 //        if (slidePosition >= 0) {
 //            if (slidePosition <= 1) {
 //                slideMotor.setPower(rotations/Math.abs(rotations));
