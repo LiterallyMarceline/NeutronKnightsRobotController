@@ -15,7 +15,7 @@ public class RobotAutoRight extends RobotOpMode {
 
         if(!ran) {
             // hang the specimen
-            int forwardDistance = 500;
+            int forwardDistance = 480;
 
             int reverse = -20;
             int reverseDistance = -400;
@@ -33,7 +33,8 @@ public class RobotAutoRight extends RobotOpMode {
 
             robot.move(forward, .25f,10, telemetry);
 
-            robot.drivetrain.strafe(-1600, .5f,10, telemetry);
+            robot.drivetrain.strafe(-1500, 1f,10, telemetry);
+            robot.drivetrain.strafe(-100, .5f,10, telemetry);
             robot.move(-50,.25f,10, telemetry);
 
 
