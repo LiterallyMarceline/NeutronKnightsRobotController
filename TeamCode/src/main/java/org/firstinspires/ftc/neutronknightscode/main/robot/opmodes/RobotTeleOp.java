@@ -77,9 +77,9 @@ public class RobotTeleOp extends RobotOpMode {
         if (gamepad2.circle) {
             robot.arm.setPosition(robot.armPositionWall);
         }
-        if (gamepad2.triangle) {
-            robot.flipPower();
-        }
+//        if (gamepad2.triangle) {
+//            robot.flipPower();
+//        }
 
 
 

@@ -23,7 +23,7 @@ public class RobotAutoRight extends RobotOpMode {
             try {
                 // move forward and turn towards submersible
                 robot.move(forwardDistance, .25f, 5, telemetry);
-                robot.drivetrain.turn(15, 0.25, telemetry);
+                robot.drivetrain.turn(20, 0.25, telemetry);
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
@@ -79,11 +79,11 @@ public class RobotAutoRight extends RobotOpMode {
     public void grabAndHang()
     {
         // move towards side wall and slow down towards the end
-        robot.drivetrain.strafe(-1000, 1f, 5, telemetry);
+        robot.drivetrain.strafe(-900, 1f, 3, telemetry);
         robot.drivetrain.strafe(-500, .5f, 2, telemetry);
 
         // move forward in case we are against the wall
-
+        robot.move(20, .5f, 2, telemetry);
 
         // raise arm to obtain specimen
         robot.arm.setPosition(robot.armPositionWall+50);
@@ -115,9 +115,15 @@ public class RobotAutoRight extends RobotOpMode {
         robot.strafe(1500, 0.5f, 5, telemetry);
 
         // square against the back wall
-        robot.drivetrain.turn(-15, 0.25, telemetry);
+        //robot.drivetrain.turn(-5, 0.25, telemetry); // if not straight add back in
 
         robot.underHangSpecimen(Robot.Heights.HIGH, telemetry);
+
+        // samplePickUp()
+        samplePickUp();
+
+        // or goto corner
+        goToCorner();
     }
 
     public void goToCorner()

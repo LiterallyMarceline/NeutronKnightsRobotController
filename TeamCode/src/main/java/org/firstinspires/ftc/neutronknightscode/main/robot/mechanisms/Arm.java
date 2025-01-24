@@ -91,10 +91,7 @@ public class Arm implements Mechanism {
 
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rotationMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        if ( useOtherMotor )
-            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        else
-            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Not in use yet;
         /*
         double pivotMax;
@@ -115,8 +112,7 @@ public class Arm implements Mechanism {
             slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
-            if ( useOtherMotor )
-                slideMotor.setPower(pivotPower*-1);
+            slideMotor.setPower(pivotPower*-1);
         } else if(pivotPower > 0){
             autoSetPosition = true;
 //            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
@@ -129,8 +125,7 @@ public class Arm implements Mechanism {
             slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
-            if ( useOtherMotor )
-                slideMotor.setPower(pivotPower*-1);
+            slideMotor.setPower(pivotPower*-1);
         } else
         {
             if(autoSetPosition)
@@ -142,7 +137,6 @@ public class Arm implements Mechanism {
                     pivotMotor.setPower(.2);
                 } catch (Exception e) { /* ignore */}
             }
-
         }
 
         telemetry.addData("arm power", "%f power", pivotPower);
@@ -247,6 +241,10 @@ public class Arm implements Mechanism {
 //            }
 //            // TO BE FIXED LATER.. GET RID OF TIME AND USE DISTANCE
 //        }
+    }
+
+    public void glide(double power) {
+        rotationMotor.setPower(power);
     }
 
     public void rotate(double amount) {

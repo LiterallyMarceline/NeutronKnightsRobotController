@@ -13,7 +13,6 @@ public class Robot implements Mechanism{
     public Drivetrain drivetrain;
     public Arm arm;
     public Intake intake;
-    public CRServo flipper;
 
     public boolean inverted1 = false;
     public boolean inverted2 = false;
@@ -39,7 +38,6 @@ public class Robot implements Mechanism{
         drivetrain.init(hardwareMap);
         arm.init(hardwareMap);
         intake.init(hardwareMap);
-        flipper = hardwareMap.get(CRServo.class, "flipper");
     }
     public void toggleInvert1(){
         inverted1 = !inverted1;
@@ -126,7 +124,7 @@ public class Robot implements Mechanism{
 
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
         //arm.slide(-gamepad2.left_stick_y, telemetry);
-        arm.rotate(gamepad2.left_stick_x);
+        arm.glide(gamepad2.left_stick_x);
 
         //arm.slide((long) gamepad2.left_stick_y*360);
     }
@@ -138,10 +136,10 @@ public class Robot implements Mechanism{
         arm.reset();
         drivetrain.reset();
     }
-    public void flipPower()
-    {
-        flipper.setPower(1);
-    }
+//    public void flipPower()
+//    {
+//        flipper.setPower(1);
+//    }
     public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
@@ -187,7 +185,7 @@ public class Robot implements Mechanism{
 
     public void underHangSpecimen(Heights bar, Telemetry telemetry){
         arm.setPosition(armPositionBar);
-        move(350, .5f,5,telemetry);
+        move(300, .5f,5,telemetry);
         arm.setPosition(armPositionBasket - 500);
 
         try {
