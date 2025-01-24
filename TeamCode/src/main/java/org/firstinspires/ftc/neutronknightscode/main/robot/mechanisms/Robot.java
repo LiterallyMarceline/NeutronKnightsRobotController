@@ -19,7 +19,7 @@ public class Robot implements Mechanism{
     public boolean slow = false;
     public boolean ejectSlow = false;
     public boolean direction = true;
-    public boolean useOtherMotor = true;
+    public boolean useOtherMotor = false;
 
     //update these bottom values
     //then test going back
@@ -185,7 +185,7 @@ public class Robot implements Mechanism{
 
     public void underHangSpecimen(Heights bar, Telemetry telemetry){
         arm.setPosition(armPositionBar);
-        move(300, .5f,5,telemetry);
+        move(310, .5f,2,telemetry);
         arm.setPosition(armPositionBasket - 500);
 
         try {

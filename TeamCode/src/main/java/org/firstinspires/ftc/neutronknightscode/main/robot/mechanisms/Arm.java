@@ -91,7 +91,7 @@ public class Arm implements Mechanism {
 
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rotationMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         // Not in use yet;
         /*
         double pivotMax;
@@ -109,10 +109,12 @@ public class Arm implements Mechanism {
 //                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            }
             pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if (useOtherMotor)
+                slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
-            slideMotor.setPower(pivotPower*-1);
+            if (useOtherMotor)
+                slideMotor.setPower(pivotPower*-1);
         } else if(pivotPower > 0){
             autoSetPosition = true;
 //            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
@@ -122,10 +124,12 @@ public class Arm implements Mechanism {
 //                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            }
             pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if (useOtherMotor)
+                slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
-            slideMotor.setPower(pivotPower*-1);
+            if (useOtherMotor)
+                slideMotor.setPower(pivotPower*-1);
         } else
         {
             if(autoSetPosition)
@@ -244,7 +248,7 @@ public class Arm implements Mechanism {
     }
 
     public void glide(double power) {
-        rotationMotor.setPower(power);
+        //rotationMotor.setPower(power);
     }
 
     public void rotate(double amount) {
@@ -281,7 +285,8 @@ public class Arm implements Mechanism {
     public void setPosition(int pos)
     {
         autoSetPosition = false;
-        pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pivotMotor.setTargetPosition(pos);
         pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         pivotMotor.setPower(1);
