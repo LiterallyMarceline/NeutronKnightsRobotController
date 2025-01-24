@@ -133,6 +133,21 @@ public class RobotAutoRight extends RobotOpMode {
     }
     public void samplePickUp()
         {
+            robot.move(-200, .25f, 5, telemetry);
+            robot.drivetrain.strafe(700, .25f, 3, telemetry);
 
+            robot.move(600, .25f, 5, telemetry);
+
+
+            robot.drivetrain.strafe(200, .25f, 3, telemetry);
+            robot.move(-1000, .25f, 5, telemetry);
+            robot.move(1000, .25f, 5, telemetry);
+
+            robot.drivetrain.strafe(200, .25f, 3, telemetry);
+            robot.move(-1000, .25f, 5, telemetry);
+            robot.move(1000, .25f, 5, telemetry);
+
+            robot.drivetrain.strafe(200, .25f, 3, telemetry);
+            robot.move(-1100, .25f, 5, telemetry);
     }
 }
