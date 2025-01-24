@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -11,21 +13,21 @@ public class Robot implements Mechanism{
     public Drivetrain drivetrain;
     public Arm arm;
     public Intake intake;
+    public CRServo flipper;
 
     public boolean inverted1 = false;
     public boolean inverted2 = false;
     public boolean slow = false;
     public boolean ejectSlow = false;
     public boolean direction = true;
+    public boolean useOtherMotor = true;
 
     //update these bottom values
     //then test going back
-    public final int armPositionDown = 5085;
-    public final int armPositionBar = 3336;
+    public final int armPositionDown = 5000;
+    public final int armPositionBar = 3354;
     public final int armPositionBasket = 3160;
-    public final int armPositionWall = 300;
-
-
+    public final int armPositionWall = 290;
 
     public Robot(){
         drivetrain = new Drivetrain();
@@ -37,6 +39,7 @@ public class Robot implements Mechanism{
         drivetrain.init(hardwareMap);
         arm.init(hardwareMap);
         intake.init(hardwareMap);
+        flipper = hardwareMap.get(CRServo.class, "flipper");
     }
     public void toggleInvert1(){
         inverted1 = !inverted1;
@@ -47,6 +50,9 @@ public class Robot implements Mechanism{
     }
     public void toggleSlow(){
         slow = !slow;
+    }
+    public void toggleOtherMotor(){
+        useOtherMotor = !useOtherMotor;
     }
     public void toggleDirection(){
         direction = !direction;
@@ -116,7 +122,8 @@ public class Robot implements Mechanism{
         double totalIntakePower = ejectPower-intakePower;
         intake.setPower(totalIntakePower);
 
-        arm.setPower(-gamepad2.right_stick_y, telemetry );
+        arm.setPower(-gamepad2.right_stick_y, useOtherMotor, telemetry );
+
         //arm.pivot(direction ? (long) gamepad2.right_trigger : (long) -gamepad2.right_trigger);
         //arm.slide(-gamepad2.left_stick_y, telemetry);
         arm.rotate(gamepad2.left_stick_x);
@@ -127,11 +134,19 @@ public class Robot implements Mechanism{
         HIGH,
         LOW
     }
+    public void reset(){
+        arm.reset();
+        drivetrain.reset();
+    }
+    public void flipPower()
+    {
+        flipper.setPower(1);
+    }
     public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
 
-                int reverseDistance = -350;
+                int reverseDistance = -200;
 
                 arm.setPosition(armPositionBar);
                 try {
@@ -141,11 +156,10 @@ public class Robot implements Mechanism{
                 }
                 intake.intake(1);
                 try {
-                    Thread.sleep(2 * 1000);
+                    Thread.sleep(1 * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
 
                 intake.intake(0.5);
                 arm.setPosition(armPositionBar+50);
@@ -169,6 +183,26 @@ public class Robot implements Mechanism{
 
 
         }
+    }
+
+    public void underHangSpecimen(Heights bar, Telemetry telemetry){
+        arm.setPosition(armPositionBar);
+        move(350, .5f,5,telemetry);
+        arm.setPosition(armPositionBasket - 500);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        intake.eject(.5);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        move(-200, .5f,5,telemetry);
+        intake.eject(0);
     }
     //    public void move(int distance, float power){
 //        drivetrain.move(distance, power);

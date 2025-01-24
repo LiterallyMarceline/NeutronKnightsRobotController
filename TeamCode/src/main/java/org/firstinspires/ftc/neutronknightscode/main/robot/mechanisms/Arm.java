@@ -40,6 +40,7 @@ public class Arm implements Mechanism {
         // Configuring motors and servos.
         // BaseServo = hardwareMap.get(Servo.class, "BaseServo2"); @Deprecated
         try {
+            autoSetPosition = false;
 
             // tryGet will not fail if not found
             pivotMotor = hardwareMap.tryGet(DcMotor.class, "pivotMotor");
@@ -50,6 +51,17 @@ public class Arm implements Mechanism {
             System.out.println("Either the pivot motor, rotation motor, or the slide motor, have not been located.");
             return;
         }
+
+        // Setting the mode for the encoders.
+        try {
+            pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        } catch (Exception e) { /* ignore */}
+
         // Configuring the encoders for future encoding.. I guess..
         pivotEncoder = new MotorEncoder(1425.1,25/6);
         slideEncoder = new MotorEncoder(1425.1,1);
@@ -61,10 +73,7 @@ public class Arm implements Mechanism {
         slidePosition = 0;
         rotationPosition = 0;
 
-        // Setting the mode for the encoders.
-        pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
     }
 
     /**
@@ -76,12 +85,16 @@ public class Arm implements Mechanism {
     public void loop(HardwareMap hardwareMap) {
         pivotPosition = pivotMotor.getCurrentPosition();
     }
-    public void setPower(double pivotPower, Telemetry telemetry/*, double slidePower (Not in use yet)*/){
+    public void setPower(double pivotPower, boolean useOtherMotor, Telemetry telemetry/*, double slidePower (Not in use yet)*/){
         // pivotPosition = pivotMotor.getCurrentPosition(); Not in use yet;
         // slidePosition = slideMotor.getCurrentPosition(); Not in use yet
+
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rotationMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        if ( useOtherMotor )
+            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        else
+            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         // Not in use yet;
         /*
         double pivotMax;
@@ -91,27 +104,43 @@ public class Arm implements Mechanism {
         // testing set to position
         if(pivotPower < 0)
         {
-            autoSetPosition = false;
-            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()-200);
-            slideMotor.setTargetPosition(slideMotor.getCurrentPosition()+200);
+            autoSetPosition = true;
+//            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()-200);
+//            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            if ( useOtherMotor ) {
+//                slideMotor.setTargetPosition(slideMotor.getCurrentPosition() + 200);
+//                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            }
+            pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
-            slideMotor.setPower(pivotPower*-1);
+            if ( useOtherMotor )
+                slideMotor.setPower(pivotPower*-1);
         } else if(pivotPower > 0){
-            autoSetPosition = false;
-            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
-            slideMotor.setTargetPosition(slideMotor.getCurrentPosition()-200);
+            autoSetPosition = true;
+//            pivotMotor.setTargetPosition(pivotMotor.getCurrentPosition()+200);
+//            pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            if ( useOtherMotor ) {
+//                slideMotor.setTargetPosition(slideMotor.getCurrentPosition() - 200);
+//                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            }
+            pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             positionToKeep = pivotMotor.getCurrentPosition();
             pivotMotor.setPower(pivotPower);
-            slideMotor.setPower(pivotPower*-1);
+            if ( useOtherMotor )
+                slideMotor.setPower(pivotPower*-1);
         } else
         {
-            if(!autoSetPosition)
+            if(autoSetPosition)
             {
-                pivotMotor.setTargetPosition(positionToKeep);
-                pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                pivotMotor.setPower(.2);
+                try {
+                    pivotMotor.setTargetPosition(positionToKeep);
+                    pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    pivotMotor.setPower(.2);
+                } catch (Exception e) { /* ignore */}
             }
 
         }
@@ -129,6 +158,13 @@ public class Arm implements Mechanism {
 
         /*if(slideMin <= slidePosition && slidePosition <= slideMax) slideMotor.setPower(slidePower);*/
     }
+
+    public void reset() {
+        autoSetPosition = false;
+//        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        pivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     // UNFINISHED
     public void pivot(double amount) {
         try {
@@ -193,10 +229,12 @@ public class Arm implements Mechanism {
         {
             if(keepSlidePosition)
             {
-                slideMotor.setTargetPosition(slidePositionToKeep);
-                slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                slideMotor.setPower(.2);
+                try {
+                    slideMotor.setTargetPosition(slidePositionToKeep);
+                    slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    slideMotor.setPower(.2);
+                } catch (Exception e) { /* ignore */}
             }
         }
 
@@ -229,10 +267,12 @@ public class Arm implements Mechanism {
             {
                 if(!rotationAutoSetPosition)
                 {
-                    rotationMotor.setTargetPosition(rotationPositionToKeep);
-                    rotationMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    rotationMotor.setPower(.2);
+                    try {
+                        rotationMotor.setTargetPosition(rotationPositionToKeep);
+                        rotationMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        //pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        rotationMotor.setPower(.2);
+                    } catch (Exception e) { /* ignore */}
                 }
 
             }
@@ -242,11 +282,10 @@ public class Arm implements Mechanism {
     }
     public void setPosition(int pos)
     {
-        autoSetPosition = true;
+        autoSetPosition = false;
+        pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pivotMotor.setTargetPosition(pos);
-
+        pivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         pivotMotor.setPower(1);
-
-
     }
 }

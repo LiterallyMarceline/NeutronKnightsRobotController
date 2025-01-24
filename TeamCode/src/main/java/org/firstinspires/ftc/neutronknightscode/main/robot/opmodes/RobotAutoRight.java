@@ -15,71 +15,43 @@ public class RobotAutoRight extends RobotOpMode {
 
         if(!ran) {
             // hang the specimen
-            int forwardDistance = 450;
+            int forwardDistance = 420;
 
             int reverse = -20;
             int reverseDistance = -400;
 
-//            robot.move(forwardDistance, .25f,10, telemetry);
-//            robot.drivetrain.turn(15, 0.25, telemetry);
-//            try {
-//                Thread.sleep(200);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
-//
-//            robot.move(forward, .25f,1, telemetry);
-//
-//            robot.drivetrain.strafe(-1500, 1f,10, telemetry);
-//            robot.drivetrain.strafe(-100, .5f,5, telemetry);
-//            robot.move(-50,.25f,2, telemetry);
-//
-//            robot.drivetrain.strafe(-50, .5f, 4, telemetry);
-//            robot.move(-20, .5f, 4, telemetry);
-//
-//
-
-            robot.arm.setPosition(robot.armPositionWall);
-
-            robot.move(-105, .25f,5, telemetry);
-            robot.intake.intake(.5);
             try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            robot.arm.setPosition(robot.armPositionWall);
-            robot.move(15, .25f,5, telemetry);
-            robot.intake.intake(0.5);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            robot.intake.intake(0);
+                // move forward and turn towards submersible
+                robot.move(forwardDistance, .25f, 5, telemetry);
+                robot.drivetrain.turn(15, 0.25, telemetry);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
-            robot.strafe(1600, 0.5f, 10, telemetry );
-            robot.move(105, .25f,10, telemetry);
-           //method below wil prob not work bc going in differently
-            robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
+                // hang specimen over bar
+                robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
-            //To move samples into zone
-            //robot.move(-200, .25f, telemetry);
-            //robot.drivetrain.odoStrafe(800);
+                // clear back wall
+                robot.move(forward, .25f, 1, telemetry);
 
-            //repeat this twice more
-            //robot.move(200, .25f, telemetry);
-            //robot.drivetrain.odoStrafe(-100);
-            //robot.move(-200, .25f, telemetry);
+                // pick up one specimen
+                grabAndHang();
+
+                //goToCorner();
+                //samplePickUp();
+                robot.arm.setPosition(0);
 
 
-            // start procedure to move samples into observation zone
+
+
+
+                // start procedure to move samples into observation zone
 //            robot.strafe(40);
-//            robot.arm.setPosition(robot.armPositionBar);
-//            robot.move(25, .5f);
-//            robot.strafe(5);
+////            robot.arm.setPosition(robot.armPositionBar);
+////            robot.move(25, .5f);
+////            robot.strafe(5);
 //
 //            while (i <= 3) {
 //                robot.move(-50, .5f);
@@ -92,8 +64,75 @@ public class RobotAutoRight extends RobotOpMode {
 //                i+=1;
 //            }
 
-            ran = true;
+                ran = true;
+            }
+            catch (Exception e) {
+            }
+            finally {
+                // clean up robot by resetting arm and drivetrain motor settings
+                robot.reset();
+            }
         }
         robot.drivetrain.updateOdo(telemetry);
+    }
+
+    public void grabAndHang()
+    {
+        // move towards side wall and slow down towards the end
+        robot.drivetrain.strafe(-1000, 1f, 5, telemetry);
+        robot.drivetrain.strafe(-500, .5f, 2, telemetry);
+
+        // move forward in case we are against the wall
+
+
+        // raise arm to obtain specimen
+        robot.arm.setPosition(robot.armPositionWall+50);
+
+        // position in corner
+        robot.drivetrain.strafe(-50, .5f, 2, telemetry);
+        robot.move(-20, .5f, 2, telemetry);
+        robot.move(-250, .25f, 2, telemetry);
+
+        // grab specimen
+        robot.intake.intake(.5);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // take specimen off the wall
+        robot.arm.setPosition(robot.armPositionWall + 500);
+        robot.move(15, .25f, 5, telemetry);
+
+        robot.intake.intake(0);
+
+        // raise arm
+        robot.arm.setPosition(robot.armPositionBar);
+
+        // start towards the submersible
+        robot.move(100, .25f, 2, telemetry);
+        robot.strafe(1500, 0.5f, 5, telemetry);
+
+        // square against the back wall
+        robot.drivetrain.turn(-15, 0.25, telemetry);
+
+        robot.underHangSpecimen(Robot.Heights.HIGH, telemetry);
+    }
+
+    public void goToCorner()
+    {
+        // move towards side wall and slow down towards the end
+        robot.drivetrain.strafe(-1200, 1f, 5, telemetry);
+        robot.drivetrain.strafe(-500, .5f, 2, telemetry);
+
+        // verify you are in the corner
+        robot.move(-200, .25f,2, telemetry);
+        robot.drivetrain.strafe(-1000, .25f, 2, telemetry);
+        robot.move(-400, .25f,2, telemetry);
+    }
+    public void samplePickUp()
+        {
+
     }
 }

@@ -13,6 +13,5 @@ public abstract class RobotOpMode extends OpMode {
     public void init() {
         robot = new Robot();
         robot.init(hardwareMap);
-
     }
 }

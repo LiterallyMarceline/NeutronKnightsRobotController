@@ -2,6 +2,7 @@ package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.sun.tools.javac.resources.javac;
 
 import org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms.Arm;
 
@@ -49,6 +50,13 @@ public class RobotTeleOp extends RobotOpMode {
         if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
             robot.toggleDirection();
         }
+        if ( currentGamepad2.square && !previousGamepad2.square)
+        {
+            robot.toggleOtherMotor();
+//            telemetry.addData("ToggledOtherMotor", "ToggledOtherMotor");
+//            updateTelemetry(telemetry);
+        }
+
         try {
             robot.giveInputs(gamepad1,gamepad2, telemetry);
         } catch (InterruptedException e) {
@@ -68,6 +76,9 @@ public class RobotTeleOp extends RobotOpMode {
         }
         if (gamepad2.circle) {
             robot.arm.setPosition(robot.armPositionWall);
+        }
+        if (gamepad2.triangle) {
+            robot.flipPower();
         }
 
 

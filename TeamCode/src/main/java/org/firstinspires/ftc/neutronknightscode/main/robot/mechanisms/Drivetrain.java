@@ -83,10 +83,12 @@ public class Drivetrain implements Mechanism{
         topRight.setTargetPosition(topRightTarget);
         bottomLeft.setTargetPosition(bottomLeftTarget);
 
-        topLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        bottomRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        bottomLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        try {
+            topLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bottomRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bottomLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } catch (Exception e) { /* ignore */}
 
         double topLeftPower = topLeftTarget == 0 ? 0 : topLeftTarget > topLeft.getCurrentPosition() ? 1 : -1;
         double bottomRightPower = bottomRightTarget == 0 ? 0 : bottomRightTarget > bottomRight.getCurrentPosition() ? 1 : -1;
@@ -164,6 +166,7 @@ public class Drivetrain implements Mechanism{
         turn(target, power, telemetry);
     }
     public void strafe(double y, float power, long timeout, Telemetry telemetry){
+        odo.resetPosAndIMU();
         odo.update();
         double targetY = odo.getPosY() + y;
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
@@ -177,6 +180,7 @@ public class Drivetrain implements Mechanism{
             long currentNanoTime = System.nanoTime();
             long durationSeconds = (currentNanoTime - startNanoTime) / 1_000_000_000;
             updateOdo(telemetry);
+
             if (durationSeconds >= timeout)
                 break;
 
@@ -196,6 +200,14 @@ public class Drivetrain implements Mechanism{
         int target = odoHeading - orgHeading;
         turn(target, power, telemetry);
     }
+
+    public void reset() {
+//        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     interface inlineFunc {
         int run(double doubl);
     }
