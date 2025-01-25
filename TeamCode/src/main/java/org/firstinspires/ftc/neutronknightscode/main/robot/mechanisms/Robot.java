@@ -23,10 +23,10 @@ public class Robot implements Mechanism{
 
     //update these bottom values
     //then test going back
-    public final int armPositionDown = 5000;
+    public final int armPositionDown = 5050;
     public final int armPositionBar = 3354;
     public final int armPositionBasket = 3160;
-    public final int armPositionWall = 290;
+    public final int armPositionWall = 340;
 
     public Robot(){
         drivetrain = new Drivetrain();

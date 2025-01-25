@@ -86,7 +86,7 @@ public class RobotAutoRight extends RobotOpMode {
         robot.move(20, .5f, 2, telemetry);
 
         // raise arm to obtain specimen
-        robot.arm.setPosition(robot.armPositionWall+50);
+        robot.arm.setPosition(robot.armPositionWall);
 
         // position in corner
         robot.drivetrain.strafe(-50, .5f, 1, telemetry);
@@ -123,13 +123,13 @@ public class RobotAutoRight extends RobotOpMode {
     public void goToCorner()
     {
         // move towards side wall and slow down towards the end
-        robot.drivetrain.strafe(-1200, 1f, 5, telemetry);
+        robot.drivetrain.strafe(-1300, 1f, 5, telemetry);
         robot.drivetrain.strafe(-500, .5f, 2, telemetry);
 
         // verify you are in the corner
-        robot.move(-200, .25f,2, telemetry);
-        robot.drivetrain.strafe(-1000, .25f, 2, telemetry);
-        robot.move(-400, .25f,2, telemetry);
+        //robot.move(-200, .25f,2, telemetry);
+        //robot.drivetrain.strafe(-1000, .25f, 2, telemetry);
+       // robot.move(-400, .25f,2, telemetry);
     }
     public void samplePickUp()
         {
