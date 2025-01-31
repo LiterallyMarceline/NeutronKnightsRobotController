@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 
+import com.qualcomm.hardware.motors.RevRoboticsHdHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -12,11 +13,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Arm implements Mechanism {
     // Creating the motors and servos objects.
     // private Servo BaseServo; @Deprecated
-    private DcMotor pivotMotor;
+    public DcMotor pivotMotor;
     public DcMotor slideMotor;
     private DcMotor rotationMotor;
+    private DcMotor flipperMotor;
     private MotorEncoder pivotEncoder;
     private MotorEncoder slideEncoder;
+    private MotorEncoder flipperEncoder;
 
     private boolean autoSetPosition = false;
     private boolean rotationAutoSetPosition = true;
@@ -26,8 +29,10 @@ public class Arm implements Mechanism {
 
     // Important Variables!
     public static volatile double pivotPosition;
+    public static volatile double flipperPosition;
     public volatile double slidePosition;
     public volatile double rotationPosition;
+
 
     private int positionToKeep = 0;
     private int rotationPositionToKeep = 0;
@@ -46,6 +51,7 @@ public class Arm implements Mechanism {
             pivotMotor = hardwareMap.tryGet(DcMotor.class, "pivotMotor");
             slideMotor = hardwareMap.tryGet(DcMotor.class,"slideMotor");
             rotationMotor = hardwareMap.tryGet(DcMotor.class,"rotationMotor");
+            flipperMotor = hardwareMap.tryGet(DcMotor.class, "flipperMotor");
 
         } catch (Exception e){
             System.out.println("Either the pivot motor, rotation motor, or the slide motor, have not been located.");
@@ -60,16 +66,21 @@ public class Arm implements Mechanism {
 
             slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            flipperMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            flipperMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         } catch (Exception e) { /* ignore */}
 
         // Configuring the encoders for future encoding.. I guess..
         pivotEncoder = new MotorEncoder(1425.1,25/6);
         slideEncoder = new MotorEncoder(1425.1,1);
+        flipperEncoder = new MotorEncoder(1425.1,100);
         // Creating a brake for the pivoting motor so that it will not have to be bounced.
         pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Setting position variables to 0 for starting position.
         pivotPosition = 0;
+        flipperPosition = 0;
         slidePosition = 0;
         rotationPosition = 0;
 
@@ -248,7 +259,7 @@ public class Arm implements Mechanism {
     }
 
     public void glide(double power) {
-        //rotationMotor.setPower(power);
+        rotationMotor.setPower(power);
     }
 
     public void rotate(double amount) {

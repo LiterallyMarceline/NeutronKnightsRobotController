@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.sun.tools.javac.resources.javac;
 
@@ -77,9 +78,10 @@ public class RobotTeleOp extends RobotOpMode {
         if (gamepad2.circle) {
             robot.arm.setPosition(robot.armPositionWall);
         }
-//        if (gamepad2.triangle) {
-//            robot.flipPower();
-//        }
+        if (gamepad2.triangle) {
+            robot.arm.pivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.arm.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
 
 

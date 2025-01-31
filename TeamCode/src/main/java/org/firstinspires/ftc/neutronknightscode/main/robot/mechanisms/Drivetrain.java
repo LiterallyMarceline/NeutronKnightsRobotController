@@ -13,6 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 import java.util.Locale;
+
+import android.graphics.Point;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -200,7 +203,15 @@ public class Drivetrain implements Mechanism{
         int target = odoHeading - orgHeading;
         turn(target, power, telemetry);
     }
-
+//    public void diagonalStrafe(Point endPoint, float power, Telemetry telemetry)
+//    {
+//        odo.update();
+//        double deg = Math.atan2(endPoint.y,endPoint.x);
+//        double leftMotorPower = -1;
+//        double rightMotorPower = (deg * (180/Math.PI));
+//        setPower(leftMotorPower, rightMotorPower, rightMotorPower, leftMotorPower);
+//
+//    }
     public void reset() {
 //        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

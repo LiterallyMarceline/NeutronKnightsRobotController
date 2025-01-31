@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.neutronknightscode.main.robot.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -136,10 +135,7 @@ public class Robot implements Mechanism{
         arm.reset();
         drivetrain.reset();
     }
-//    public void flipPower()
-//    {
-//        flipper.setPower(1);
-//    }
+
     public void hangSpecimen(Heights bar, Telemetry telemetry){
         switch(bar){
             case HIGH:
