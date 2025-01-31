@@ -203,15 +203,51 @@ public class Drivetrain implements Mechanism{
         int target = odoHeading - orgHeading;
         turn(target, power, telemetry);
     }
-//    public void diagonalStrafe(Point endPoint, float power, Telemetry telemetry)
-//    {
-//        odo.update();
-//        double deg = Math.atan2(endPoint.y,endPoint.x);
-//        double leftMotorPower = -1;
-//        double rightMotorPower = (deg * (180/Math.PI));
-//        setPower(leftMotorPower, rightMotorPower, rightMotorPower, leftMotorPower);
-//
-//    }
+    public void diagonalStrafe(Point endPoint, float power, Telemetry telemetry)
+    {
+        odo.update();
+        double rad = Math.atan2(endPoint.y,endPoint.x);
+
+        //convert to deg to get angle and divide by 90 to get the ratio
+        double ratio = (rad * (180/Math.PI)/90);
+        if(endPoint.x >0)
+        {
+            if(endPoint.y>0)
+            {
+                double leftMotorPower = power*-1;
+                double rightMotorPower = ratio*power;
+                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+            }
+            else
+            {
+                double leftMotorPower = power*1;
+                double rightMotorPower = ratio*power;
+                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+            }
+
+        }
+        else if(endPoint.x < 0)
+        {
+            if(endPoint.y>0)
+            {
+                double leftMotorPower = power*-1;
+                double rightMotorPower = -ratio*power;
+                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+            }
+            else
+            {
+                double leftMotorPower = power*1;
+                double rightMotorPower = ratio*power;
+                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+
+
+            }
+
+        }
+
+
+
+    }
     public void reset() {
 //        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
