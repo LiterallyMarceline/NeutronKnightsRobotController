@@ -223,9 +223,11 @@ public class Drivetrain implements Mechanism{
             }
             else
             {
-                double leftMotorPower = power*1;
-                double rightMotorPower = botRRatio*power;
-                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+//                double leftMotorPower = power*-1;
+//                double rightMotorPower = botRRatio*power;
+//                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+
+
             }
 
         }
@@ -233,14 +235,19 @@ public class Drivetrain implements Mechanism{
         {
             if(endPoint.y>0)
             {
-                double leftMotorPower = power*-1;
-                double rightMotorPower = -topLRatio*power;
+//                double leftMotorPower = power*topLRatio;
+//                double rightMotorPower = power;
+//                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+
+                double leftMotorPower = power*botLRatio;
+                double rightMotorPower = power;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
             }
             else
             {
-                double leftMotorPower = power*1;
-                double rightMotorPower = botLRatio*power;
+
+                double leftMotorPower = power*botRRatio;
+                double rightMotorPower = -1*power;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
 
 

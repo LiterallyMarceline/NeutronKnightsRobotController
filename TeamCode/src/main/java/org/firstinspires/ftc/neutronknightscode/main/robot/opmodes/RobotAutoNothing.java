@@ -16,8 +16,8 @@ public class RobotAutoNothing extends RobotOpMode {
 //        this does nothing
         if(!ran){
             //robot.drivetrain.diagonalStrafe(new Point(3,3),0.5f,telemetry);
-            //robot.drivetrain.diagonalStrafe(new Point(-3,3),0.5f,telemetry);
-            robot.drivetrain.diagonalStrafe(new Point(3,-3),0.5f,telemetry);
+            robot.drivetrain.diagonalStrafe(new Point(-3,3),0.5f,telemetry);
+            //robot.drivetrain.diagonalStrafe(new Point(3,-3),0.5f,telemetry);
             //robot.drivetrain.diagonalStrafe(new Point(-3,-3),0.5f,telemetry);
             ran = true;
 

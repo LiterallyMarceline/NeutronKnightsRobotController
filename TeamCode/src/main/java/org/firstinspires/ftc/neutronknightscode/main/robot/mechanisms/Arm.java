@@ -141,6 +141,10 @@ public class Arm implements Mechanism {
             pivotMotor.setPower(pivotPower);
             if (useOtherMotor)
                 slideMotor.setPower(pivotPower*-1);
+            if (!useOtherMotor) {
+                slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                slideMotor.setPower(0);
+            }
         } else
         {
             if(autoSetPosition)
