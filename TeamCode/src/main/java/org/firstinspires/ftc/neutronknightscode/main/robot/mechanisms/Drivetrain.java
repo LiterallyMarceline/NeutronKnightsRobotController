@@ -209,7 +209,10 @@ public class Drivetrain implements Mechanism{
         double rad = Math.atan2(endPoint.y,endPoint.x);
 
         //convert to deg to get angle and divide by 90 to get the ratio
-        double ratio = (rad * (180/Math.PI)/90);
+        double ratio = ((rad * (180/Math.PI))/90);
+        double botRRatio = ((360-(rad * (180/Math.PI)))/90);
+        double botLRatio = ((270-(rad * (180/Math.PI)))/90);
+        double topLRatio = ((180-(rad * (180/Math.PI)))/90);
         if(endPoint.x >0)
         {
             if(endPoint.y>0)
@@ -221,7 +224,7 @@ public class Drivetrain implements Mechanism{
             else
             {
                 double leftMotorPower = power*1;
-                double rightMotorPower = ratio*power;
+                double rightMotorPower = botRRatio*power;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
             }
 
@@ -231,13 +234,13 @@ public class Drivetrain implements Mechanism{
             if(endPoint.y>0)
             {
                 double leftMotorPower = power*-1;
-                double rightMotorPower = -ratio*power;
+                double rightMotorPower = -topLRatio*power;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
             }
             else
             {
                 double leftMotorPower = power*1;
-                double rightMotorPower = ratio*power;
+                double rightMotorPower = botLRatio*power;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
 
 
