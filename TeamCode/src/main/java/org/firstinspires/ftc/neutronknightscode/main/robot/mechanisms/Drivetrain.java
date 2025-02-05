@@ -209,23 +209,25 @@ public class Drivetrain implements Mechanism{
         double rad = Math.atan2(endPoint.y,endPoint.x);
 
         //convert to deg to get angle and divide by 90 to get the ratio
-        double ratio = ((rad * (180/Math.PI))/90);
-        double botRRatio = ((360-(rad * (180/Math.PI)))/90);
-        double botLRatio = ((270-(rad * (180/Math.PI)))/90);
-        double topLRatio = ((180-(rad * (180/Math.PI)))/90);
+        double deg = (rad * (180/Math.PI));
+        double ratio = (deg/90);
+
+        double botLRatio = ((180+deg)/90) * -1;
+        double topLRatio = ((180-deg)/90);
         if(endPoint.x >0)
         {
             if(endPoint.y>0)
             {
+                telemetry.addData("Power", power);
                 double leftMotorPower = power*-1;
                 double rightMotorPower = ratio*power;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
             }
             else
             {
-//                double leftMotorPower = power*-1;
-//                double rightMotorPower = botRRatio*power;
-//                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+                double leftMotorPower = ratio*power*1;
+                double rightMotorPower = power*1;
+                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
 
 
             }
@@ -235,20 +237,20 @@ public class Drivetrain implements Mechanism{
         {
             if(endPoint.y>0)
             {
-//                double leftMotorPower = power*topLRatio;
-//                double rightMotorPower = power;
-//                setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
 
-                double leftMotorPower = power*botLRatio;
-                double rightMotorPower = power;
+                double leftMotorPower = topLRatio*power;
+                double rightMotorPower = power*-1;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+
             }
             else
             {
 
-                double leftMotorPower = power*botRRatio;
-                double rightMotorPower = -1*power;
+                double leftMotorPower = power*1;
+                double rightMotorPower = botLRatio*power*1;
+
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
+
 
 
             }
@@ -309,8 +311,8 @@ public class Drivetrain implements Mechanism{
         telemetry.addData("Velocity", velocity);
         telemetry.addData("Status", odo.getDeviceStatus());
         telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
-        telemetry.update();
-        telemetry.update();
+        //telemetry.update();
+        //telemetry.update();
     }
 }
 /*odo.update();
