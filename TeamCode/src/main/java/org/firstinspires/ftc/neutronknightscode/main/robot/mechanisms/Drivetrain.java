@@ -214,6 +214,16 @@ public class Drivetrain implements Mechanism{
 
         double botLRatio = ((180+deg)/90) * -1;
         double topLRatio = ((180-deg)/90);
+
+        double targetX = odo.getPosX() + endPoint.x;
+        double targetY = odo.getPosY() + endPoint.y;
+//        if (endPoint.x < 0 && endPoint.y < 0) {
+//            if ((targetX >= odo.getPosX()) && (targetY >= odo.getPosY()))
+//                break;
+//        } else {
+//            if ((targetX <= odo.getPosX()) && (targetY >= odo.getPosY()))
+//                break;
+//        }
         if(endPoint.x >0)
         {
             if(endPoint.y>0)
@@ -228,8 +238,6 @@ public class Drivetrain implements Mechanism{
                 double leftMotorPower = ratio*power*1;
                 double rightMotorPower = power*1;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
-
-
             }
 
         }
@@ -237,22 +245,15 @@ public class Drivetrain implements Mechanism{
         {
             if(endPoint.y>0)
             {
-
                 double leftMotorPower = topLRatio*power;
                 double rightMotorPower = power*-1;
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
-
             }
             else
             {
-
                 double leftMotorPower = power*1;
                 double rightMotorPower = botLRatio*power*1;
-
                 setPower(leftMotorPower, leftMotorPower, rightMotorPower, rightMotorPower);
-
-
-
             }
 
         }
