@@ -22,7 +22,7 @@ public class RobotAutoRight extends RobotOpMode {
 
             try {
                 // move forward and turn towards submersible
-                robot.move(forwardDistance, .25f, 5, telemetry);
+                robot.move(forwardDistance, 5, telemetry);
                 robot.drivetrain.turn(20, 0.25, telemetry);
                 try {
                     Thread.sleep(200);
@@ -34,7 +34,7 @@ public class RobotAutoRight extends RobotOpMode {
                 robot.hangSpecimen(Robot.Heights.HIGH, telemetry);
 
                 // clear back wall
-                robot.move(forward, .25f, 1, telemetry);
+                robot.move(forward, 1, telemetry);
 
                 // pick up one specimen
                 grabAndHang();
@@ -79,19 +79,19 @@ public class RobotAutoRight extends RobotOpMode {
     public void grabAndHang()
     {
         // move towards side wall and slow down towards the end
-        robot.drivetrain.strafe(-900, 1f, 3, telemetry);
-        robot.drivetrain.strafe(-500, .5f, 2, telemetry);
+        robot.drivetrain.strafe(-900,  3, telemetry);
+        robot.drivetrain.strafe(-500, 2, telemetry);
 
         // move forward in case we are against the wall
-        robot.move(20, .5f, 2, telemetry);
+        robot.move(20, 2, telemetry);
 
         // raise arm to obtain specimen
         robot.arm.setPosition(robot.armPositionWall-35);
 
         // position in corner
-        robot.drivetrain.strafe(-50, .5f, 1, telemetry);
-        robot.move(-20, .5f, 1, telemetry);
-        robot.move(-250, .25f, 2, telemetry);
+        robot.drivetrain.strafe(-50,  1, telemetry);
+        robot.move(-20, 1, telemetry);
+        robot.move(-250, 2, telemetry);
 
         // grab specimen
         robot.intake.intake(.5);
@@ -103,7 +103,7 @@ public class RobotAutoRight extends RobotOpMode {
 
         // take specimen off the wall
         robot.arm.setPosition(robot.armPositionWall + 500);
-        robot.move(15, .25f, 5, telemetry);
+        robot.move(15, 5, telemetry);
 
         robot.intake.intake(0);
 
@@ -111,8 +111,8 @@ public class RobotAutoRight extends RobotOpMode {
         robot.arm.setPosition(robot.armPositionBar);
 
         // start towards the submersible
-        robot.move(100, .25f, 2, telemetry);
-        robot.strafe(1300, 0.5f, 5, telemetry);
+        robot.move(100, 2, telemetry);
+        robot.strafe(1300,  5, telemetry);
 
         // square against the back wall
         //robot.drivetrain.turn(-5, 0.25, telemetry); // if not straight add back in
@@ -123,8 +123,8 @@ public class RobotAutoRight extends RobotOpMode {
     public void goToCorner()
     {
         // move towards side wall and slow down towards the end
-        robot.drivetrain.strafe(-1500, 1f, 5, telemetry);
-        robot.drivetrain.strafe(-500, .5f, 2, telemetry);
+        robot.drivetrain.strafe(-1500, 5, telemetry);
+        robot.drivetrain.strafe(-500, 2, telemetry);
 
         // verify you are in the corner
         //robot.move(-200, .25f,2, telemetry);
@@ -133,21 +133,21 @@ public class RobotAutoRight extends RobotOpMode {
     }
     public void samplePickUp()
         {
-            robot.move(-200, .25f, 5, telemetry);
-            robot.drivetrain.strafe(-1000, .25f, 5, telemetry);
+            robot.move(-200, 5, telemetry);
+            robot.drivetrain.strafe(-1000, 5, telemetry);
 
-            robot.move(700, .25f, 5, telemetry);
+            robot.move(700, 5, telemetry);
 
 
-            robot.drivetrain.strafe(-200, .25f, 3, telemetry);
-            robot.move(-1000, .25f, 5, telemetry);
-            robot.move(1000, .25f, 5, telemetry);
+            robot.drivetrain.strafe(-200,  3, telemetry);
+            robot.move(-1000, 5, telemetry);
+            robot.move(1000,  5, telemetry);
 
-            robot.drivetrain.strafe(-200, .25f, 3, telemetry);
-            robot.move(-1000, .25f, 5, telemetry);
-            robot.move(1000, .25f, 5, telemetry);
+            robot.drivetrain.strafe(-200,  3, telemetry);
+            robot.move(-1000, 5, telemetry);
+            robot.move(1000, 5, telemetry);
 
-            robot.drivetrain.strafe(-200, .25f, 3, telemetry);
-            robot.move(-1100, .25f, 5, telemetry);
+            robot.drivetrain.strafe(-200, 3, telemetry);
+            robot.move(-1100, 5, telemetry);
     }
 }

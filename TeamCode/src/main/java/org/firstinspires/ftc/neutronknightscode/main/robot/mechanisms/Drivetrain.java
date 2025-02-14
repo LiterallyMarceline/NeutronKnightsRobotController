@@ -135,14 +135,15 @@ public class Drivetrain implements Mechanism{
 //        turn(target, telemetry);
 //    }
     // for debugging
-    public void move(double x, float power, long timeout, Telemetry telemetry){
+    public void move(double x, long timeout, Telemetry telemetry){
         odo.update();
 
         double targetX = odo.getPosX() + x;
+        double specialPower = 4 * ((-1 * Math.pow(odo.getPosX(), 2)) + (targetX * odo.getPosX()))/Math.pow(targetX, 2);
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
         int odoHeading = heading.run(odo.getHeading());
         int orgHeading = odoHeading;
-        double motorPower = x == 0 ? 0 : targetX > odo.getPosX() ? -1 * power : 1 * power;
+        double motorPower = x == 0 ? 0 : targetX > odo.getPosX() ? -1 * specialPower : 1 * specialPower;
         setPower(motorPower,motorPower,motorPower,motorPower);
         // get time, add timeout
         long startNanoTime = System.nanoTime();
@@ -166,16 +167,17 @@ public class Drivetrain implements Mechanism{
         }
         setPower(0,0,0,0);
         int target = odoHeading - orgHeading;
-        turn(target, power, telemetry);
+        turn(target, specialPower, telemetry);
     }
-    public void strafe(double y, float power, long timeout, Telemetry telemetry){
+    public void strafe(double y, long timeout, Telemetry telemetry){
         odo.resetPosAndIMU();
         odo.update();
         double targetY = odo.getPosY() + y;
+        double specialPower = 4 * ((-1 * Math.pow(odo.getPosY(), 2)) + (targetY * odo.getPosY()))/Math.pow(targetY, 2);
         inlineFunc heading = (radians) -> {return (int) (radians * (180/Math.PI));};
         int odoHeading = heading.run(odo.getHeading());
         int orgHeading = odoHeading;
-        double motorPower = y == 0 ? 0 : targetY > odo.getPosY() ? -1 * power : 1 * power;
+        double motorPower = y == 0 ? 0 : targetY > odo.getPosY() ? -1 * specialPower : 1 * specialPower;
         setPower(motorPower*-1,motorPower*-1,motorPower,motorPower);
         long startNanoTime = System.nanoTime();
         while(true){
@@ -201,7 +203,7 @@ public class Drivetrain implements Mechanism{
         }
         setPower(0,0,0,0);
         int target = odoHeading - orgHeading;
-        turn(target, power, telemetry);
+        turn(target, specialPower, telemetry);
     }
     public void diagonalStrafe(Point endPoint, float power, Telemetry telemetry)
     {

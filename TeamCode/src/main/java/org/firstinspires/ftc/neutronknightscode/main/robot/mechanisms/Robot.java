@@ -158,7 +158,7 @@ public class Robot implements Mechanism{
                 intake.intake(0.5);
                 arm.setPosition(armPositionBar+50);
                 intake.intake(0);
-                move(reverseDistance, .25f, 10, telemetry);
+                move(reverseDistance, 10, telemetry);
                 intake.intake(0.5);
                 arm.setPosition(-(armPositionDown+50));
                 try {
@@ -181,7 +181,7 @@ public class Robot implements Mechanism{
 
     public void underHangSpecimen(Heights bar, Telemetry telemetry){
         arm.setPosition(armPositionBar);
-        move(310, .5f,2,telemetry);
+        move(310,2,telemetry);
         arm.setPosition(armPositionBasket - 500);
 
         try {
@@ -195,17 +195,17 @@ public class Robot implements Mechanism{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        move(-200, .5f,5,telemetry);
+        move(-200,5,telemetry);
         intake.eject(0);
     }
     //    public void move(int distance, float power){
 //        drivetrain.move(distance, power);
 //    }
-    public void move(int distance, float power, long timeout, Telemetry telemetry){
-        drivetrain.move(distance, power, timeout, telemetry);
+    public void move(int distance, long timeout, Telemetry telemetry){
+        drivetrain.move(distance, timeout, telemetry);
     }
-    public void strafe(double distance, float power, long timeout, Telemetry telemetry){
-        drivetrain.strafe(distance, power, 10, telemetry);
+    public void strafe(double distance, long timeout, Telemetry telemetry){
+        drivetrain.strafe(distance, timeout, telemetry);
     }
 
     public void scoreBasket(Heights basket){
