@@ -2,29 +2,25 @@ package org.firstinspires.ftc.neutronknightscode.main.field;
 
 import android.graphics.Point;
 
+import java.util.Map;
+
 public class Field {
+    Map Nodes;
+    int size;
+    Field(int _size, boolean[] _isOccupied){
+        size = _size;
+        for(int key = 0; key < size*size; key++){
+            Nodes.put(key, new Node(_isOccupied[key]));
+        }
+    }
+    Node getNode(int x, int y){
+        try {
+            if(y < size) throw new Error();
 
-    public static final Point startingPoint = new Point(0,0);
-    public static final Point endingPoint = new Point(10,10);
-    public int max_x = 338;
-    public int max_y = 338;
-
-//    public int submersible_x = 117;
-//    public int submersible_y = 117;
-//    142;
-//
-//    217;
-//    242;
-//
-//    123;
-//    113;
-//
-//    30 by 8;
-
-
-    public static boolean checkInbounds(Point position){
-        boolean outOfBoundsX = position.x < startingPoint.x || endingPoint.x < position.x;
-        boolean outOfBoundsY = position.y < startingPoint.y || endingPoint.y < position.y;
-        return !outOfBoundsX && !outOfBoundsY;
+            int key = (size * y) + x;
+            return (Node) Nodes.get(key);
+        } catch(Error e){
+            return (Node) Nodes.get(size*size);
+        }
     }
 }
