@@ -57,7 +57,6 @@ public class Arm implements Mechanism {
             System.out.println("Either the pivot motor, rotation motor, or the slide motor, have not been located.");
             return;
         }
-
         // Setting the mode for the encoders.
         try {
             pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

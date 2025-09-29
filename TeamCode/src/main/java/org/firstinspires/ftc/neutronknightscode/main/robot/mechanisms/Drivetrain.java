@@ -42,26 +42,27 @@ public class Drivetrain implements Mechanism{
 
     @Override
     public void init(HardwareMap hardwareMap) {
+        try {
+            topLeft = hardwareMap.get(DcMotor.class, "topLeft");
+            bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
+            topRight = hardwareMap.get(DcMotor.class, "topRight");
+            bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
 
-        topLeft = hardwareMap.get(DcMotor.class, "topLeft");
-        bottomRight = hardwareMap.get(DcMotor.class, "bottomRight");
-        topRight = hardwareMap.get(DcMotor.class, "topRight");
-        bottomLeft = hardwareMap.get(DcMotor.class, "bottomLeft");
+            odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+            odo.setOffsets(125.0, 100.0);
+            odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+            odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+            odo.resetPosAndIMU();
 
-        odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
-        odo.setOffsets(125.0, 100.0);
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odo.resetPosAndIMU();
+            topLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            bottomLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        topLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        bottomLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        topLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bottomRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        topRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bottomLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        drivetrainEncoder.drivetrainEncoder(1.04);
+            topLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            bottomRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            topRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            bottomLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            drivetrainEncoder.drivetrainEncoder(1.04);
+        } catch(Error e) {}
     }
     public void setPower(double topLeftPower, double bottomRightPower, double topRightPower, double bottomLeftPower) {
         topLeft.setPower(topLeftPower);

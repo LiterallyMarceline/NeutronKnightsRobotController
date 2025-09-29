@@ -2,15 +2,20 @@ package org.firstinspires.ftc.neutronknightscode.main.field;
 
 import android.graphics.Point;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Field {
-    Map Nodes;
+    ArrayList<Node> Nodes;
     int size;
+    int total = 0;
     Field(int _size, boolean[] _isOccupied){
         size = _size;
-        for(int key = 0; key < size*size; key++){
-            Nodes.put(key, new Node(_isOccupied[key]));
+        for(int y = 1; y <= size; y++) {
+            for (int x = 1; x <= size; x++) {
+                Nodes.add(new Node(x,y,_isOccupied[total]));
+                total++;
+            }
         }
     }
     Node getNode(int x, int y){
@@ -20,7 +25,7 @@ public class Field {
             int key = (size * y) + x;
             return (Node) Nodes.get(key);
         } catch(Error e){
-            return (Node) Nodes.get(size*size);
+            return (Node) Nodes.get(size*size-1);
         }
     }
 }
